@@ -1,4 +1,4 @@
-package kr.jm.utils.flow;
+package kr.jm.utils.flow.publisher;
 
 import kr.jm.utils.helper.JMLog;
 import kr.jm.utils.helper.JMThread;
@@ -12,39 +12,39 @@ import static kr.jm.utils.helper.JMThread.newSingleThreadPool;
 import static kr.jm.utils.helper.JMThread.shutdownNowAndWaitToBeTerminated;
 
 
-public class SubmissionWithWaitingPublisherDemon<T> extends
-        SubmissionWithWaitingPublisher<T> {
+public class WaitingSubmissionPublisherDemon<T> extends
+        WaitingSubmissionPublisher<T> {
 
     private static final Logger log = org.slf4j.LoggerFactory
-            .getLogger(SubmissionWithWaitingPublisherDemon.class);
+            .getLogger(WaitingSubmissionPublisherDemon.class);
 
     private ExecutorService executorService;
     private Supplier<T> dataSupplier;
 
-    public SubmissionWithWaitingPublisherDemon(Supplier<T> dataSupplier) {
+    public WaitingSubmissionPublisherDemon(Supplier<T> dataSupplier) {
         this(null, dataSupplier);
     }
 
-    public SubmissionWithWaitingPublisherDemon(int sizeLimit, Supplier<T>
+    public WaitingSubmissionPublisherDemon(int queueSizeLimit, Supplier<T>
             dataSupplier) {
-        this(null, sizeLimit, dataSupplier);
+        this(null, queueSizeLimit, dataSupplier);
     }
 
-    public SubmissionWithWaitingPublisherDemon(ExecutorService executorService,
+    public WaitingSubmissionPublisherDemon(ExecutorService executorService,
             Supplier<T> dataSupplier) {
         this(executorService, Flow.defaultBufferSize(), dataSupplier);
     }
 
-    public SubmissionWithWaitingPublisherDemon(ExecutorService executorService,
-            int sizeLimit, Supplier<T> dataSupplier) {
-        super(executorService, sizeLimit);
+    public WaitingSubmissionPublisherDemon(ExecutorService executorService,
+            int queueSizeLimit, Supplier<T> dataSupplier) {
+        super(executorService, queueSizeLimit);
         this.executorService = newSingleThreadPool();
         this.dataSupplier = dataSupplier;
     }
 
-    public SubmissionWithWaitingPublisherDemon<T> start() {
+    public WaitingSubmissionPublisherDemon<T> start() {
         this.executorService = JMThread.startWithSingleExecutorService(
-                "SubmissionWithWaitingPublisherDemon", this::run);
+                "WaitingSubmissionPublisherDemon", this::run);
         return this;
     }
 

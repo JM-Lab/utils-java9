@@ -1,6 +1,10 @@
 package kr.jm.utils.flow;
 
 import kr.jm.utils.JMWordSplitter;
+import kr.jm.utils.flow.processor.JMConcurrentTransformProcessor;
+import kr.jm.utils.flow.processor.JMTransformProcessor;
+import kr.jm.utils.flow.publisher.WaitingSubmissionPublisher;
+import kr.jm.utils.flow.subscriber.JMSubscriberBuilder;
 import kr.jm.utils.helper.JMResources;
 import kr.jm.utils.helper.JMThread;
 import org.junit.After;
@@ -13,15 +17,19 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class SingleSubscriberProcessorTest {
 
-    private SingleTransformWithThreadPoolProcessor<String, List<String>>
+    private JMConcurrentTransformProcessor<String, List<String>>
             singleTransformWithThreadPoolProcessor;
+    private JMTransformProcessor<String, List<String>>
+            singleTransformProcessor;
 
     @Before
     public void setUp() {
+        this.singleTransformProcessor =
+                new JMTransformProcessor<>(
+                        (TransformerInterface<String, List<String>>) JMWordSplitter::splitAsList);
         this.singleTransformWithThreadPoolProcessor =
-                new SingleTransformWithThreadPoolProcessor<>(
-                        JMThread.getCommonPool(), 2,
-                        JMWordSplitter::splitAsList);
+                new JMConcurrentTransformProcessor<>(3,
+                        (TransformerInterface<String, List<String>>) JMWordSplitter::splitAsList);
     }
 
     @After
@@ -32,17 +40,32 @@ public class SingleSubscriberProcessorTest {
     @Test
     public void testSubmissionProcessor() {
         AtomicInteger atomicInteger = new AtomicInteger();
-        this.singleTransformWithThreadPoolProcessor
-                .subscribe(SingleSubscriber.build(wordList ->
+        this.singleTransformProcessor
+                .subscribe(JMSubscriberBuilder.build(wordList ->
                         System.out.println(
                                 atomicInteger.incrementAndGet() + " " +
                                         wordList)));
-        SubmissionWithWaitingPublisher<String> submissionWithWaitingPublisher =
-                new SubmissionWithWaitingPublisher<>();
-        submissionWithWaitingPublisher
+        WaitingSubmissionPublisher<String> waitingSubmissionPublisher =
+                new WaitingSubmissionPublisher<>();
+        waitingSubmissionPublisher
+                .subscribe(this.singleTransformProcessor);
+        JMResources.readLines("webAccessLogSample.txt")
+                .forEach(waitingSubmissionPublisher::submit);
+        JMThread.sleep(1000);
+        Assert.assertEquals(1024, atomicInteger.longValue());
+
+        atomicInteger.set(0);
+        this.singleTransformWithThreadPoolProcessor
+                .subscribe(JMSubscriberBuilder.build(wordList ->
+                        System.out.println(
+                                atomicInteger.incrementAndGet() + " " +
+                                        wordList)));
+        waitingSubmissionPublisher =
+                new WaitingSubmissionPublisher<>();
+        waitingSubmissionPublisher
                 .subscribe(this.singleTransformWithThreadPoolProcessor);
         JMResources.readLines("webAccessLogSample.txt")
-                .forEach(submissionWithWaitingPublisher::submit);
+                .forEach(waitingSubmissionPublisher::submit);
         JMThread.sleep(1000);
         Assert.assertEquals(1024, atomicInteger.longValue());
     }

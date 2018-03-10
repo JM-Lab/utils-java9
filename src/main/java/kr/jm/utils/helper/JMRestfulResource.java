@@ -5,19 +5,9 @@ import kr.jm.utils.datastructure.JMCollections;
 
 import java.util.List;
 
-/**
- * The Class JMRestfulResource.
- */
 public class JMRestfulResource {
     private static final String HTTP = "http";
 
-    /**
-     * Gets the string from rest or classpath or file path.
-     *
-     * @param resourceWithRestOrClasspathOrFilePath the resource in rest url or classpath or file path
-     * @param charsetName                           the charsetName
-     * @return the string from rest or classpath or file path
-     */
     public static String getStringWithRestOrClasspathOrFilePath(
             String resourceWithRestOrClasspathOrFilePath, String charsetName) {
         return resourceWithRestOrClasspathOrFilePath.startsWith(HTTP)
@@ -27,12 +17,6 @@ public class JMRestfulResource {
                 resourceWithRestOrClasspathOrFilePath, charsetName);
     }
 
-    /**
-     * Gets the string from rest or classpath or file path.
-     *
-     * @param resourceWithRestOrClasspathOrFilePath the resource in rest url or classpath or file path
-     * @return the string from rest or classpath or file path
-     */
     public static String getStringWithRestOrClasspathOrFilePath(
             String resourceWithRestOrClasspathOrFilePath) {
         return getStringWithRestOrClasspathOrFilePath(
@@ -40,12 +24,6 @@ public class JMRestfulResource {
                 JMResources.UTF_8_CharsetString);
     }
 
-    /**
-     * Read lines from rest or classpath or file path.
-     *
-     * @param resourceWithRestOrClasspathOrFilePath the resource in rest url or classpath or file path
-     * @return the list
-     */
     public static List<String> readLinesWithRestOrClasspathOrFilePath(
             String resourceWithRestOrClasspathOrFilePath, String charsetName) {
         return JMCollections

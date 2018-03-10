@@ -1,5 +1,6 @@
 package kr.jm.utils.flow;
 
+import kr.jm.utils.flow.publisher.WaitingSubmissionPublisher;
 import kr.jm.utils.helper.JMFiles;
 import kr.jm.utils.helper.JMResources;
 import kr.jm.utils.helper.JMThread;
@@ -11,24 +12,24 @@ import org.junit.Test;
 import java.util.concurrent.Flow;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class SubmissionWithWaitingPublisherTest {
+public class WaitingSubmissionPublisherTest {
 
     static {
         System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "debug");
     }
 
-    private SubmissionWithWaitingPublisher<String>
-            submissionWithWaitingPublisher;
+    private WaitingSubmissionPublisher<String>
+            waitingSubmissionPublisher;
 
     @Before
     public void setUp() {
-        this.submissionWithWaitingPublisher =
-                new SubmissionWithWaitingPublisher<>(100);
+        this.waitingSubmissionPublisher =
+                new WaitingSubmissionPublisher<>(100);
     }
 
     @After
     public void tearDown() {
-        this.submissionWithWaitingPublisher.close();
+        this.waitingSubmissionPublisher.close();
     }
 
     @Test
@@ -64,14 +65,14 @@ public class SubmissionWithWaitingPublisherTest {
 
         String path = JMResources.getURI("webAccessLogSample.txt").getPath();
         System.out.println(path);
-        submissionWithWaitingPublisher.subscribe(subscriber);
+        waitingSubmissionPublisher.subscribe(subscriber);
         JMFiles.getLineStream(path).filter(s -> s.length() % 2 == 0)
-                .forEach(submissionWithWaitingPublisher::submit);
-        submissionWithWaitingPublisher.consume(s
+                .forEach(waitingSubmissionPublisher::submit);
+        waitingSubmissionPublisher.consume(s
                 -> System.out.println(atomicInteger.incrementAndGet()
                 + "- singleSubscriber - " + s));
         JMFiles.getLineStream(path).filter(s -> s.length() % 2 == 1)
-                .forEach(submissionWithWaitingPublisher::submit);
+                .forEach(waitingSubmissionPublisher::submit);
         JMThread.sleep(3000);
 
         Assert.assertEquals(1575, atomicInteger.intValue());

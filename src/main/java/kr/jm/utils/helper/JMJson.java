@@ -13,9 +13,6 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-/**
- * The Class JMJson.
- */
 public class JMJson {
     private static final Logger log =
             org.slf4j.LoggerFactory.getLogger(JMJson.class);
@@ -30,13 +27,6 @@ public class JMJson {
             .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
             .enable(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL);
 
-    /**
-     * To json string.
-     *
-     * @param <D>        the generic type
-     * @param dataObject the metric object
-     * @return the string
-     */
     public static <D> String toJsonString(D dataObject) {
         try {
             return jsonMapper.writeValueAsString(dataObject);
@@ -46,13 +36,6 @@ public class JMJson {
         }
     }
 
-    /**
-     * To json string or null.
-     *
-     * @param <D>        the generic type
-     * @param dataObject the metric object
-     * @return the string
-     */
     public static <D> String toJsonStringOrNull(D dataObject) {
         try {
             return jsonMapper.writeValueAsString(dataObject);
@@ -61,23 +44,10 @@ public class JMJson {
         }
     }
 
-    /**
-     * To json string.
-     *
-     * @param jsonFile the json file
-     * @return the string
-     */
     public static String toJsonString(File jsonFile) {
         return JMFiles.readString(jsonFile);
     }
 
-    /**
-     * To json file.
-     *
-     * @param jsonString     the json string
-     * @param returnJsonFile the return json file
-     * @return the file
-     */
     public static File toJsonFile(String jsonString, File returnJsonFile) {
         try {
             jsonMapper.writeValue(returnJsonFile, jsonString);
@@ -88,13 +58,6 @@ public class JMJson {
         }
     }
 
-    /**
-     * To json file or null.
-     *
-     * @param jsonString     the json string
-     * @param returnJsonFile the return json file
-     * @return the file
-     */
     public static File toJsonFileOrNull(String jsonString,
             File returnJsonFile) {
         try {
@@ -105,14 +68,6 @@ public class JMJson {
         }
     }
 
-    /**
-     * To json file.
-     *
-     * @param <D>            the generic type
-     * @param dataObject     the metric object
-     * @param returnJsonFile the return json file
-     * @return the file
-     */
     public static <D> File toJsonFile(D dataObject, File returnJsonFile) {
         try {
             jsonMapper.writeValue(returnJsonFile, dataObject);
@@ -123,14 +78,6 @@ public class JMJson {
         }
     }
 
-    /**
-     * To json file or null.
-     *
-     * @param <D>            the generic type
-     * @param dataObject     the metric object
-     * @param returnJsonFile the return json file
-     * @return the file
-     */
     public static <D> File toJsonFileOrNull(D dataObject, File returnJsonFile) {
         try {
             jsonMapper.writeValue(returnJsonFile, dataObject);
@@ -141,14 +88,6 @@ public class JMJson {
         }
     }
 
-    /**
-     * From bytes.
-     *
-     * @param <T>           the generic type
-     * @param bytes         the bytes
-     * @param typeReference the type reference
-     * @return the t
-     */
     public static <T> T withBytes(byte[] bytes,
             TypeReference<T> typeReference) {
         try {
@@ -159,14 +98,6 @@ public class JMJson {
         }
     }
 
-    /**
-     * From bytes or null.
-     *
-     * @param <T>           the generic type
-     * @param bytes         the bytes
-     * @param typeReference the type reference
-     * @return the t
-     */
     public static <T> T withBytesOrNull(byte[] bytes,
             TypeReference<T> typeReference) {
         try {
@@ -176,14 +107,6 @@ public class JMJson {
         }
     }
 
-    /**
-     * From bytes.
-     *
-     * @param <T>   the generic type
-     * @param bytes the bytes
-     * @param c     the c
-     * @return the t
-     */
     public static <T> T withBytes(byte[] bytes, Class<T> c) {
         try {
             return jsonMapper.readValue(bytes, c);
@@ -193,14 +116,6 @@ public class JMJson {
         }
     }
 
-    /**
-     * From bytes or null.
-     *
-     * @param <T>   the generic type
-     * @param bytes the bytes
-     * @param c     the c
-     * @return the t
-     */
     public static <T> T withBytesOrNull(byte[] bytes, Class<T> c) {
         try {
             return jsonMapper.readValue(bytes, c);
@@ -209,14 +124,6 @@ public class JMJson {
         }
     }
 
-    /**
-     * From json string.
-     *
-     * @param <T>           the generic type
-     * @param jsonString    the json string
-     * @param typeReference the type reference
-     * @return the t
-     */
     public static <T> T withJsonString(String jsonString,
             TypeReference<T> typeReference) {
         return withBytes(jsonString.getBytes(), typeReference);
@@ -235,51 +142,19 @@ public class JMJson {
         return withJsonString(jsonMapListString, LIST_MAP_TYPE_REFERENCE);
     }
 
-    /**
-     * From json string or null.
-     *
-     * @param <T>           the generic type
-     * @param jsonString    the json string
-     * @param typeReference the type reference
-     * @return the t
-     */
     public static <T> T withJsonStringOrNull(String jsonString,
             TypeReference<T> typeReference) {
         return withBytesOrNull(jsonString.getBytes(), typeReference);
     }
 
-    /**
-     * From json string.
-     *
-     * @param <T>        the generic type
-     * @param jsonString the json string
-     * @param c          the c
-     * @return the t
-     */
     public static <T> T withJsonString(String jsonString, Class<T> c) {
         return withBytes(jsonString.getBytes(), c);
     }
 
-    /**
-     * From json string or null.
-     *
-     * @param <T>        the generic type
-     * @param jsonString the json string
-     * @param c          the c
-     * @return the t
-     */
     public static <T> T withJsonStringOrNull(String jsonString, Class<T> c) {
         return withBytesOrNull(jsonString.getBytes(), c);
     }
 
-    /**
-     * From json file.
-     *
-     * @param <T>           the generic type
-     * @param jsonFile      the json file
-     * @param typeReference the type reference
-     * @return the t
-     */
     public static <T> T withJsonFile(File jsonFile,
             TypeReference<T> typeReference) {
         try {
@@ -290,14 +165,6 @@ public class JMJson {
         }
     }
 
-    /**
-     * From json file or null.
-     *
-     * @param <T>           the generic type
-     * @param jsonFile      the json file
-     * @param typeReference the type reference
-     * @return the t
-     */
     public static <T> T withJsonFileOrNull(File jsonFile,
             TypeReference<T> typeReference) {
         try {
@@ -307,14 +174,6 @@ public class JMJson {
         }
     }
 
-    /**
-     * From json file.
-     *
-     * @param <T>      the generic type
-     * @param jsonFile the json file
-     * @param c        the c
-     * @return the t
-     */
     public static <T> T withJsonFile(File jsonFile, Class<T> c) {
         try {
             return jsonMapper.readValue(jsonFile, c);
@@ -324,14 +183,6 @@ public class JMJson {
         }
     }
 
-    /**
-     * From json file or null.
-     *
-     * @param <T>      the generic type
-     * @param jsonFile the json file
-     * @param c        the c
-     * @return the t
-     */
     public static <T> T withJsonFileOrNull(File jsonFile, Class<T> c) {
         try {
             return jsonMapper.readValue(jsonFile, c);
@@ -340,14 +191,6 @@ public class JMJson {
         }
     }
 
-    /**
-     * From json input stream.
-     *
-     * @param <T>           the generic type
-     * @param inputStream   the input stream
-     * @param typeReference the type reference
-     * @return the t
-     */
     public static <T> T withJsonInputStream(InputStream inputStream,
             TypeReference<T> typeReference) {
         try {
@@ -358,14 +201,6 @@ public class JMJson {
         }
     }
 
-    /**
-     * From json input stream or null.
-     *
-     * @param <T>           the generic type
-     * @param inputStream   the input stream
-     * @param typeReference the type reference
-     * @return the t
-     */
     public static <T> T withJsonInputStreamOrNull(InputStream inputStream,
             TypeReference<T> typeReference) {
         try {
@@ -375,14 +210,6 @@ public class JMJson {
         }
     }
 
-    /**
-     * From json input stream.
-     *
-     * @param <T>         the generic type
-     * @param inputStream the input stream
-     * @param c           the c
-     * @return the t
-     */
     public static <T> T withJsonInputStream(InputStream inputStream,
             Class<T> c) {
         try {
@@ -393,14 +220,6 @@ public class JMJson {
         }
     }
 
-    /**
-     * From json input stream or null.
-     *
-     * @param <T>         the generic type
-     * @param inputStream the input stream
-     * @param c           the c
-     * @return the t
-     */
     public static <T> T withJsonInputStreamOrNull(InputStream inputStream,
             Class<T> c) {
         try {
@@ -410,14 +229,6 @@ public class JMJson {
         }
     }
 
-    /**
-     * From json resource.
-     *
-     * @param <T>               the generic type
-     * @param resourceClasspath the resource in classpath
-     * @param typeReference     the type reference
-     * @return the t
-     */
     public static <T> T withJsonResource(String resourceClasspath,
             TypeReference<T> typeReference) {
         return withJsonInputStream(
@@ -425,28 +236,12 @@ public class JMJson {
                 typeReference);
     }
 
-    /**
-     * From json resource.
-     *
-     * @param <T>               the generic type
-     * @param resourceClasspath the resource in classpath
-     * @param c                 the c
-     * @return the t
-     */
     public static <T> T withJsonResource(String resourceClasspath,
             Class<T> c) {
         return withJsonInputStream(
                 JMResources.getResourceInputStream(resourceClasspath), c);
     }
 
-    /**
-     * From rest or classpath or file path.
-     *
-     * @param <T>                                  the generic type
-     * @param resourceRestUrlOrClasspathOrFilePath the resource in rest url or classpath or file path
-     * @param typeReference                        the type reference
-     * @return the t
-     */
     public static <T> T withRestOrClasspathOrFilePath(
             String resourceRestUrlOrClasspathOrFilePath,
             TypeReference<T> typeReference) {
@@ -465,14 +260,6 @@ public class JMJson {
                 typeReference);
     }
 
-    /**
-     * From classpath or file path.
-     *
-     * @param <T>                         the generic type
-     * @param resourceClasspathOrFilePath the resource in classpath or file path
-     * @param typeReference               the type reference
-     * @return the t
-     */
     public static <T> T withClasspathOrFilePath(
             String resourceClasspathOrFilePath,
             TypeReference<T> typeReference) {
@@ -488,13 +275,6 @@ public class JMJson {
                 typeReference);
     }
 
-    /**
-     * Convert map.
-     *
-     * @param <T>      the generic type
-     * @param pojoBean the pojo bean
-     * @return the hash map
-     */
     public static <T> Map<String, Object> convertMap(T pojoBean) {
         return transform(pojoBean, MAP_TYPE_REFERENCE);
     }

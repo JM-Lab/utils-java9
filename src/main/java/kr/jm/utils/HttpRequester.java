@@ -28,23 +28,12 @@ import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 
-/**
- * The Class HttpRequester.
- */
 public class HttpRequester {
     private static final Logger log = org.slf4j.LoggerFactory
             .getLogger(HttpRequester.class);
     private static final Charset UTF_8 = Charset.forName("UTF-8");
     private static CloseableHttpClient HttpClient;
 
-    /**
-     * Gets the rest api response as object.
-     *
-     * @param <T>           the generic type
-     * @param uri           the uri
-     * @param typeReference the type reference
-     * @return the rest api response as object
-     */
     public static <T> T getRestApiResponseAsObject(String uri,
             TypeReference<T> typeReference) {
         try {
@@ -56,12 +45,6 @@ public class HttpRequester {
         }
     }
 
-    /**
-     * Gets the response as string.
-     *
-     * @param uri the uri
-     * @return the response as string
-     */
     public static String getResponseAsString(String uri) {
         return request(new HttpGet(uri));
     }
@@ -71,24 +54,10 @@ public class HttpRequester {
     }
 
 
-    /**
-     * Gets the response as string.
-     *
-     * @param uri    the uri
-     * @param header the header
-     * @return the response as string
-     */
     public static String getResponseAsString(URI uri, Header header) {
         return getResponseAsString(uri.toString(), header);
     }
 
-    /**
-     * Gets the response as string.
-     *
-     * @param uri    the uri
-     * @param header the header
-     * @return the response as string
-     */
     public static String getResponseAsString(String uri, Header header) {
         HttpGet httpGet = new HttpGet(uri);
         httpGet.setHeader(header);
@@ -96,15 +65,6 @@ public class HttpRequester {
         return request(httpGet);
     }
 
-    /**
-     * Builds the uri.
-     *
-     * @param httpOrHttps the http or https
-     * @param host        the host
-     * @param path        the path
-     * @param paramMap    the param map
-     * @return the uri
-     */
     public static URI buildUri(String httpOrHttps, String host, String path,
             Map<String, String> paramMap) {
         try {
@@ -117,12 +77,6 @@ public class HttpRequester {
         }
     }
 
-    /**
-     * Builds the name value pare list.
-     *
-     * @param keyValueMap the key value map
-     * @return the list
-     */
     public static List<NameValuePair>
     buildNameValuePareList(Map<String, String> keyValueMap) {
         return keyValueMap.entrySet().stream()
@@ -131,27 +85,11 @@ public class HttpRequester {
                 .collect(toList());
     }
 
-    /**
-     * Post response as string.
-     *
-     * @param uri        the uri
-     * @param header     the header
-     * @param httpEntity the http entity
-     * @return the string
-     */
     public static String postResponseAsString(URI uri, Header header,
             HttpEntity httpEntity) {
         return postResponseAsString(uri.toString(), header, httpEntity);
     }
 
-    /**
-     * Post response as string.
-     *
-     * @param uri        the uri
-     * @param header     the header
-     * @param httpEntity the http entity
-     * @return the string
-     */
     public static String postResponseAsString(String uri, Header header,
             HttpEntity httpEntity) {
         HttpPost httpPost = new HttpPost(uri);
@@ -160,43 +98,18 @@ public class HttpRequester {
         return request(httpPost);
     }
 
-    /**
-     * Builds the http entity.
-     *
-     * @param object the object
-     * @return the string entity
-     */
     public static StringEntity buildHttpEntity(Object object) {
         return buildHttpEntity(JMJson.toJsonString(object));
     }
 
-    /**
-     * Builds the http entity.
-     *
-     * @param string the string
-     * @return the string entity
-     */
     public static StringEntity buildHttpEntity(String string) {
         return buildHttpEntity(string, UTF_8);
     }
 
-    /**
-     * Builds the http entity.
-     *
-     * @param string  the string
-     * @param charset the charset
-     * @return the string entity
-     */
     public static StringEntity buildHttpEntity(String string, Charset charset) {
         return new StringEntity(string, charset);
     }
 
-    /**
-     * Request.
-     *
-     * @param httpUriRequest the http uri request
-     * @return the string
-     */
     public static String request(HttpUriRequest httpUriRequest) {
         return request(httpUriRequest, Charset.defaultCharset());
     }
@@ -223,22 +136,11 @@ public class HttpRequester {
         }
     }
 
-    /**
-     * Gets the http client.
-     *
-     * @return the http client
-     */
     public static CloseableHttpClient getHttpClient() {
         return HttpClient == null ? HttpClient = HttpClients.createDefault()
                 : HttpClient;
     }
 
-    /**
-     * Sets the http client.
-     *
-     * @param httpClient the http client
-     * @return the closeable http client
-     */
     public static CloseableHttpClient
     setHttpClient(CloseableHttpClient httpClient) {
         return HttpClient = httpClient;
