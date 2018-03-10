@@ -6,7 +6,7 @@ JMLab Java 9 Utility Libraries
 ## Prerequisites:
 * Java 9 or later
 
-## For Example:
+## Usage
 Gradle:
 ```groovy
 compile 'kr.jmlab:jmlab-utils-java9:0.1.0'
@@ -49,7 +49,7 @@ Checkout the source code:
 * **RestfulResourceUpdater**
 * **etc.**
 
-###For example :
+### For Example :
 * **[TestCase](https://github.com/JM-Lab/utils-java9/tree/master/src/test/java/kr/jm/utils)**
 
 ## LICENSE
