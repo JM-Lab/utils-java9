@@ -1,6 +1,5 @@
-package kr.jm.utils.flow;
+package kr.jm.utils.flow.publisher;
 
-import kr.jm.utils.flow.publisher.WaitingSubmissionPublisherDemon;
 import kr.jm.utils.flow.subscriber.JMSubscriberBuilder;
 import kr.jm.utils.helper.JMResources;
 import kr.jm.utils.helper.JMThread;

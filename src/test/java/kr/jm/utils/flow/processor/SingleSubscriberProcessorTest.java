@@ -1,8 +1,7 @@
-package kr.jm.utils.flow;
+package kr.jm.utils.flow.processor;
 
 import kr.jm.utils.JMWordSplitter;
-import kr.jm.utils.flow.processor.JMConcurrentTransformProcessor;
-import kr.jm.utils.flow.processor.JMTransformProcessor;
+import kr.jm.utils.flow.TransformerInterface;
 import kr.jm.utils.flow.publisher.WaitingSubmissionPublisher;
 import kr.jm.utils.flow.subscriber.JMSubscriberBuilder;
 import kr.jm.utils.helper.JMResources;
