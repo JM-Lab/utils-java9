@@ -12,6 +12,12 @@ import java.util.concurrent.Flow;
 import java.util.concurrent.SubmissionPublisher;
 import java.util.function.BiConsumer;
 
+/**
+ * The type Jm concurrent transform processor.
+ *
+ * @param <T> the type parameter
+ * @param <R> the type parameter
+ */
 public class JMConcurrentTransformProcessor<T, R> extends
         JMTransformProcessor<T, R> implements AutoCloseable {
     private static final Logger log =
@@ -19,16 +25,34 @@ public class JMConcurrentTransformProcessor<T, R> extends
                     .getLogger(JMConcurrentTransformProcessor.class);
     private SubmissionPublisher<R> submissionPublisher;
 
+    /**
+     * Instantiates a new Jm concurrent transform processor.
+     *
+     * @param transformerInterface the transformer interface
+     */
     public JMConcurrentTransformProcessor(
             TransformerInterface<T, R> transformerInterface) {
         this(Flow.defaultBufferSize(), transformerInterface);
     }
 
+    /**
+     * Instantiates a new Jm concurrent transform processor.
+     *
+     * @param maxBufferCapacity    the max buffer capacity
+     * @param transformerInterface the transformer interface
+     */
     public JMConcurrentTransformProcessor(int maxBufferCapacity,
             TransformerInterface<T, R> transformerInterface) {
         this(null, maxBufferCapacity, transformerInterface);
     }
 
+    /**
+     * Instantiates a new Jm concurrent transform processor.
+     *
+     * @param executor             the executor
+     * @param maxBufferCapacity    the max buffer capacity
+     * @param transformerInterface the transformer interface
+     */
     public JMConcurrentTransformProcessor(Executor executor,
             int maxBufferCapacity,
             TransformerInterface<T, R> transformerInterface) {
@@ -36,16 +60,34 @@ public class JMConcurrentTransformProcessor<T, R> extends
                 getSingleInputPublisherBiConsumer(transformerInterface));
     }
 
+    /**
+     * Instantiates a new Jm concurrent transform processor.
+     *
+     * @param singlePublisherBiConsumer the single publisher bi consumer
+     */
     public JMConcurrentTransformProcessor(
             BiConsumer<T, JMSubmissionPublisher<? super R>> singlePublisherBiConsumer) {
         this(Flow.defaultBufferSize(), singlePublisherBiConsumer);
     }
 
+    /**
+     * Instantiates a new Jm concurrent transform processor.
+     *
+     * @param maxBufferCapacity         the max buffer capacity
+     * @param singlePublisherBiConsumer the single publisher bi consumer
+     */
     public JMConcurrentTransformProcessor(int maxBufferCapacity,
             BiConsumer<T, JMSubmissionPublisher<? super R>> singlePublisherBiConsumer) {
         this(null, maxBufferCapacity, singlePublisherBiConsumer);
     }
 
+    /**
+     * Instantiates a new Jm concurrent transform processor.
+     *
+     * @param executor                  the executor
+     * @param maxBufferCapacity         the max buffer capacity
+     * @param singlePublisherBiConsumer the single publisher bi consumer
+     */
     public JMConcurrentTransformProcessor(Executor executor,
             int maxBufferCapacity,
             BiConsumer<T, JMSubmissionPublisher<? super R>> singlePublisherBiConsumer) {

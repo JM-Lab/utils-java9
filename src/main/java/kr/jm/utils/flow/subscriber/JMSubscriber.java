@@ -8,6 +8,11 @@ import java.util.Optional;
 import java.util.concurrent.Flow;
 import java.util.function.Consumer;
 
+/**
+ * The type Jm subscriber.
+ *
+ * @param <T> the type parameter
+ */
 public class JMSubscriber<T> implements Flow.Subscriber<T> {
 
     private static final Logger log =
@@ -15,6 +20,11 @@ public class JMSubscriber<T> implements Flow.Subscriber<T> {
     private Flow.Subscription subscription;
     private Consumer<T> itemConsumer;
 
+    /**
+     * Instantiates a new Jm subscriber.
+     *
+     * @param itemConsumer the item consumer
+     */
     public JMSubscriber(Consumer<T> itemConsumer) {
         this.itemConsumer = itemConsumer;
     }

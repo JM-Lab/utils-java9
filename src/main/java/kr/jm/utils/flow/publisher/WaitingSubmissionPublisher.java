@@ -9,27 +9,56 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
+/**
+ * The type Waiting submission publisher.
+ *
+ * @param <T> the type parameter
+ */
 public class WaitingSubmissionPublisher<T> extends
         SubmissionPublisherImplementsJM<T> {
 
     private int queueSizeLimit;
 
+    /**
+     * Instantiates a new Waiting submission publisher.
+     */
     public WaitingSubmissionPublisher() {
         this(getDefaultQueueSizeLimit());
     }
 
+    /**
+     * Instantiates a new Waiting submission publisher.
+     *
+     * @param queueSizeLimit the queue size limit
+     */
     public WaitingSubmissionPublisher(int queueSizeLimit) {
         this(null, queueSizeLimit);
     }
 
+    /**
+     * Instantiates a new Waiting submission publisher.
+     *
+     * @param executor the executor
+     */
     public WaitingSubmissionPublisher(Executor executor) {
         this(executor, getDefaultQueueSizeLimit());
     }
 
+    /**
+     * Gets default queue size limit.
+     *
+     * @return the default queue size limit
+     */
     public static int getDefaultQueueSizeLimit() {
         return OS.getAvailableProcessors() * 8;
     }
 
+    /**
+     * Instantiates a new Waiting submission publisher.
+     *
+     * @param executor       the executor
+     * @param queueSizeLimit the queue size limit
+     */
     public WaitingSubmissionPublisher(Executor executor,
             int queueSizeLimit) {
         super(Objects.isNull(executor) ? JMThread
@@ -69,6 +98,11 @@ public class WaitingSubmissionPublisher<T> extends
         }
     }
 
+    /**
+     * Gets size limit.
+     *
+     * @return the size limit
+     */
     public int getSizeLimit() {
         return queueSizeLimit;
     }

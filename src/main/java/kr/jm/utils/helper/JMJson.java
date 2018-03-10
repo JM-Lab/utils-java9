@@ -13,13 +13,25 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type Jm json.
+ */
 public class JMJson {
     private static final Logger log =
             org.slf4j.LoggerFactory.getLogger(JMJson.class);
+    /**
+     * The constant MAP_TYPE_REFERENCE.
+     */
     public static final TypeReference<Map<String, Object>> MAP_TYPE_REFERENCE =
             getTypeReference();
+    /**
+     * The constant LIST_TYPE_REFERENCE.
+     */
     public static final TypeReference<List<Object>> LIST_TYPE_REFERENCE =
             getTypeReference();
+    /**
+     * The constant LIST_MAP_TYPE_REFERENCE.
+     */
     public static final TypeReference<List<Map<String, Object>>>
             LIST_MAP_TYPE_REFERENCE = getTypeReference();
     private static ObjectMapper jsonMapper = new ObjectMapper()
@@ -27,6 +39,13 @@ public class JMJson {
             .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
             .enable(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL);
 
+    /**
+     * To json string string.
+     *
+     * @param <D>        the type parameter
+     * @param dataObject the data object
+     * @return the string
+     */
     public static <D> String toJsonString(D dataObject) {
         try {
             return jsonMapper.writeValueAsString(dataObject);
@@ -36,6 +55,13 @@ public class JMJson {
         }
     }
 
+    /**
+     * To json string or null string.
+     *
+     * @param <D>        the type parameter
+     * @param dataObject the data object
+     * @return the string
+     */
     public static <D> String toJsonStringOrNull(D dataObject) {
         try {
             return jsonMapper.writeValueAsString(dataObject);
@@ -44,10 +70,23 @@ public class JMJson {
         }
     }
 
+    /**
+     * To json string string.
+     *
+     * @param jsonFile the json file
+     * @return the string
+     */
     public static String toJsonString(File jsonFile) {
         return JMFiles.readString(jsonFile);
     }
 
+    /**
+     * To json file file.
+     *
+     * @param jsonString     the json string
+     * @param returnJsonFile the return json file
+     * @return the file
+     */
     public static File toJsonFile(String jsonString, File returnJsonFile) {
         try {
             jsonMapper.writeValue(returnJsonFile, jsonString);
@@ -58,6 +97,13 @@ public class JMJson {
         }
     }
 
+    /**
+     * To json file or null file.
+     *
+     * @param jsonString     the json string
+     * @param returnJsonFile the return json file
+     * @return the file
+     */
     public static File toJsonFileOrNull(String jsonString,
             File returnJsonFile) {
         try {
@@ -68,6 +114,14 @@ public class JMJson {
         }
     }
 
+    /**
+     * To json file file.
+     *
+     * @param <D>            the type parameter
+     * @param dataObject     the data object
+     * @param returnJsonFile the return json file
+     * @return the file
+     */
     public static <D> File toJsonFile(D dataObject, File returnJsonFile) {
         try {
             jsonMapper.writeValue(returnJsonFile, dataObject);
@@ -78,6 +132,14 @@ public class JMJson {
         }
     }
 
+    /**
+     * To json file or null file.
+     *
+     * @param <D>            the type parameter
+     * @param dataObject     the data object
+     * @param returnJsonFile the return json file
+     * @return the file
+     */
     public static <D> File toJsonFileOrNull(D dataObject, File returnJsonFile) {
         try {
             jsonMapper.writeValue(returnJsonFile, dataObject);
@@ -88,6 +150,14 @@ public class JMJson {
         }
     }
 
+    /**
+     * With bytes t.
+     *
+     * @param <T>           the type parameter
+     * @param bytes         the bytes
+     * @param typeReference the type reference
+     * @return the t
+     */
     public static <T> T withBytes(byte[] bytes,
             TypeReference<T> typeReference) {
         try {
@@ -98,6 +168,14 @@ public class JMJson {
         }
     }
 
+    /**
+     * With bytes or null t.
+     *
+     * @param <T>           the type parameter
+     * @param bytes         the bytes
+     * @param typeReference the type reference
+     * @return the t
+     */
     public static <T> T withBytesOrNull(byte[] bytes,
             TypeReference<T> typeReference) {
         try {
@@ -107,6 +185,14 @@ public class JMJson {
         }
     }
 
+    /**
+     * With bytes t.
+     *
+     * @param <T>   the type parameter
+     * @param bytes the bytes
+     * @param c     the c
+     * @return the t
+     */
     public static <T> T withBytes(byte[] bytes, Class<T> c) {
         try {
             return jsonMapper.readValue(bytes, c);
@@ -116,6 +202,14 @@ public class JMJson {
         }
     }
 
+    /**
+     * With bytes or null t.
+     *
+     * @param <T>   the type parameter
+     * @param bytes the bytes
+     * @param c     the c
+     * @return the t
+     */
     public static <T> T withBytesOrNull(byte[] bytes, Class<T> c) {
         try {
             return jsonMapper.readValue(bytes, c);
@@ -124,37 +218,95 @@ public class JMJson {
         }
     }
 
+    /**
+     * With json string t.
+     *
+     * @param <T>           the type parameter
+     * @param jsonString    the json string
+     * @param typeReference the type reference
+     * @return the t
+     */
     public static <T> T withJsonString(String jsonString,
             TypeReference<T> typeReference) {
         return withBytes(jsonString.getBytes(), typeReference);
     }
 
+    /**
+     * To map map.
+     *
+     * @param jsonObjectString the json object string
+     * @return the map
+     */
     public static Map<String, Object> toMap(String jsonObjectString) {
         return withJsonString(jsonObjectString, MAP_TYPE_REFERENCE);
     }
 
+    /**
+     * To list list.
+     *
+     * @param jsonListString the json list string
+     * @return the list
+     */
     public static List<Object> toList(String jsonListString) {
         return withJsonString(jsonListString, LIST_TYPE_REFERENCE);
     }
 
+    /**
+     * To map list list.
+     *
+     * @param jsonMapListString the json map list string
+     * @return the list
+     */
     public static List<Map<String, Object>> toMapList(
             String jsonMapListString) {
         return withJsonString(jsonMapListString, LIST_MAP_TYPE_REFERENCE);
     }
 
+    /**
+     * With json string or null t.
+     *
+     * @param <T>           the type parameter
+     * @param jsonString    the json string
+     * @param typeReference the type reference
+     * @return the t
+     */
     public static <T> T withJsonStringOrNull(String jsonString,
             TypeReference<T> typeReference) {
         return withBytesOrNull(jsonString.getBytes(), typeReference);
     }
 
+    /**
+     * With json string t.
+     *
+     * @param <T>        the type parameter
+     * @param jsonString the json string
+     * @param c          the c
+     * @return the t
+     */
     public static <T> T withJsonString(String jsonString, Class<T> c) {
         return withBytes(jsonString.getBytes(), c);
     }
 
+    /**
+     * With json string or null t.
+     *
+     * @param <T>        the type parameter
+     * @param jsonString the json string
+     * @param c          the c
+     * @return the t
+     */
     public static <T> T withJsonStringOrNull(String jsonString, Class<T> c) {
         return withBytesOrNull(jsonString.getBytes(), c);
     }
 
+    /**
+     * With json file t.
+     *
+     * @param <T>           the type parameter
+     * @param jsonFile      the json file
+     * @param typeReference the type reference
+     * @return the t
+     */
     public static <T> T withJsonFile(File jsonFile,
             TypeReference<T> typeReference) {
         try {
@@ -165,6 +317,14 @@ public class JMJson {
         }
     }
 
+    /**
+     * With json file or null t.
+     *
+     * @param <T>           the type parameter
+     * @param jsonFile      the json file
+     * @param typeReference the type reference
+     * @return the t
+     */
     public static <T> T withJsonFileOrNull(File jsonFile,
             TypeReference<T> typeReference) {
         try {
@@ -174,6 +334,14 @@ public class JMJson {
         }
     }
 
+    /**
+     * With json file t.
+     *
+     * @param <T>      the type parameter
+     * @param jsonFile the json file
+     * @param c        the c
+     * @return the t
+     */
     public static <T> T withJsonFile(File jsonFile, Class<T> c) {
         try {
             return jsonMapper.readValue(jsonFile, c);
@@ -183,6 +351,14 @@ public class JMJson {
         }
     }
 
+    /**
+     * With json file or null t.
+     *
+     * @param <T>      the type parameter
+     * @param jsonFile the json file
+     * @param c        the c
+     * @return the t
+     */
     public static <T> T withJsonFileOrNull(File jsonFile, Class<T> c) {
         try {
             return jsonMapper.readValue(jsonFile, c);
@@ -191,6 +367,14 @@ public class JMJson {
         }
     }
 
+    /**
+     * With json input stream t.
+     *
+     * @param <T>           the type parameter
+     * @param inputStream   the input stream
+     * @param typeReference the type reference
+     * @return the t
+     */
     public static <T> T withJsonInputStream(InputStream inputStream,
             TypeReference<T> typeReference) {
         try {
@@ -201,6 +385,14 @@ public class JMJson {
         }
     }
 
+    /**
+     * With json input stream or null t.
+     *
+     * @param <T>           the type parameter
+     * @param inputStream   the input stream
+     * @param typeReference the type reference
+     * @return the t
+     */
     public static <T> T withJsonInputStreamOrNull(InputStream inputStream,
             TypeReference<T> typeReference) {
         try {
@@ -210,6 +402,14 @@ public class JMJson {
         }
     }
 
+    /**
+     * With json input stream t.
+     *
+     * @param <T>         the type parameter
+     * @param inputStream the input stream
+     * @param c           the c
+     * @return the t
+     */
     public static <T> T withJsonInputStream(InputStream inputStream,
             Class<T> c) {
         try {
@@ -220,6 +420,14 @@ public class JMJson {
         }
     }
 
+    /**
+     * With json input stream or null t.
+     *
+     * @param <T>         the type parameter
+     * @param inputStream the input stream
+     * @param c           the c
+     * @return the t
+     */
     public static <T> T withJsonInputStreamOrNull(InputStream inputStream,
             Class<T> c) {
         try {
@@ -229,6 +437,14 @@ public class JMJson {
         }
     }
 
+    /**
+     * With json resource t.
+     *
+     * @param <T>               the type parameter
+     * @param resourceClasspath the resource classpath
+     * @param typeReference     the type reference
+     * @return the t
+     */
     public static <T> T withJsonResource(String resourceClasspath,
             TypeReference<T> typeReference) {
         return withJsonInputStream(
@@ -236,12 +452,28 @@ public class JMJson {
                 typeReference);
     }
 
+    /**
+     * With json resource t.
+     *
+     * @param <T>               the type parameter
+     * @param resourceClasspath the resource classpath
+     * @param c                 the c
+     * @return the t
+     */
     public static <T> T withJsonResource(String resourceClasspath,
             Class<T> c) {
         return withJsonInputStream(
                 JMResources.getResourceInputStream(resourceClasspath), c);
     }
 
+    /**
+     * With rest or classpath or file path t.
+     *
+     * @param <T>                                  the type parameter
+     * @param resourceRestUrlOrClasspathOrFilePath the resource rest url or classpath or file path
+     * @param typeReference                        the type reference
+     * @return the t
+     */
     public static <T> T withRestOrClasspathOrFilePath(
             String resourceRestUrlOrClasspathOrFilePath,
             TypeReference<T> typeReference) {
@@ -251,6 +483,14 @@ public class JMJson {
                 typeReference);
     }
 
+    /**
+     * With rest or file path or classpath t.
+     *
+     * @param <T>                               the type parameter
+     * @param resourceRestOrFilePathOrClasspath the resource rest or file path or classpath
+     * @param typeReference                     the type reference
+     * @return the t
+     */
     public static <T> T withRestOrFilePathOrClasspath(
             String resourceRestOrFilePathOrClasspath,
             TypeReference<T> typeReference) {
@@ -260,6 +500,14 @@ public class JMJson {
                 typeReference);
     }
 
+    /**
+     * With classpath or file path t.
+     *
+     * @param <T>                         the type parameter
+     * @param resourceClasspathOrFilePath the resource classpath or file path
+     * @param typeReference               the type reference
+     * @return the t
+     */
     public static <T> T withClasspathOrFilePath(
             String resourceClasspathOrFilePath,
             TypeReference<T> typeReference) {
@@ -267,6 +515,14 @@ public class JMJson {
                 resourceClasspathOrFilePath), typeReference);
     }
 
+    /**
+     * With file path or classpath t.
+     *
+     * @param <T>                         the type parameter
+     * @param resourceFilePathOrClasspath the resource file path or classpath
+     * @param typeReference               the type reference
+     * @return the t
+     */
     public static <T> T withFilePathOrClasspath(
             String resourceFilePathOrClasspath,
             TypeReference<T> typeReference) {
@@ -275,15 +531,37 @@ public class JMJson {
                 typeReference);
     }
 
+    /**
+     * Convert map map.
+     *
+     * @param <T>      the type parameter
+     * @param pojoBean the pojo bean
+     * @return the map
+     */
     public static <T> Map<String, Object> convertMap(T pojoBean) {
         return transform(pojoBean, MAP_TYPE_REFERENCE);
     }
 
+    /**
+     * Transform t 2.
+     *
+     * @param <T1>                   the type parameter
+     * @param <T2>                   the type parameter
+     * @param object                 the object
+     * @param transformTypeReference the transform type reference
+     * @return the t 2
+     */
     public static <T1, T2> T2 transform(T1 object,
             TypeReference<T2> transformTypeReference) {
         return withJsonString(toJsonString(object), transformTypeReference);
     }
 
+    /**
+     * Gets type reference.
+     *
+     * @param <T> the type parameter
+     * @return the type reference
+     */
     public static <T> TypeReference<T> getTypeReference() {
         return new TypeReference<>() {};
     }

@@ -3,7 +3,20 @@ package kr.jm.utils.flow.processor;
 import java.util.concurrent.Flow;
 import java.util.concurrent.Flow.Processor;
 
+/**
+ * The type Flow processor builder.
+ */
 public class FlowProcessorBuilder {
+    /**
+     * Combine processor.
+     *
+     * @param <T>        the type parameter
+     * @param <M>        the type parameter
+     * @param <R>        the type parameter
+     * @param processor1 the processor 1
+     * @param processor2 the processor 2
+     * @return the processor
+     */
     public static <T, M, R> Processor<T, R> combine(
             Processor<T, M> processor1, Processor<M, R> processor2) {
         processor1.subscribe(processor2);

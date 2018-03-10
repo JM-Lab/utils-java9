@@ -10,6 +10,12 @@ import org.slf4j.Logger;
 import java.util.concurrent.Flow;
 import java.util.function.BiConsumer;
 
+/**
+ * The type Jm transform processor.
+ *
+ * @param <T> the type parameter
+ * @param <R> the type parameter
+ */
 public class JMTransformProcessor<T, R> implements
         JMTransformProcessorInterface<T, R> {
     private static final Logger log =
@@ -17,17 +23,35 @@ public class JMTransformProcessor<T, R> implements
     private JMSubscriber<T> inputSubscriber;
     private JMSubmissionPublisher<R> outputPublisher;
 
+    /**
+     * Instantiates a new Jm transform processor.
+     *
+     * @param transformerInterface the transformer interface
+     */
     public JMTransformProcessor(
             TransformerInterface<T, R> transformerInterface) {
         this(getSingleInputPublisherBiConsumer(transformerInterface));
     }
 
+    /**
+     * Gets single input publisher bi consumer.
+     *
+     * @param <I>                  the type parameter
+     * @param <O>                  the type parameter
+     * @param transformerInterface the transformer interface
+     * @return the single input publisher bi consumer
+     */
     protected static <I, O> BiConsumer<I, JMSubmissionPublisher<? super O>>
     getSingleInputPublisherBiConsumer(
             TransformerInterface<I, O> transformerInterface) {
         return (i, s) -> s.submit(transformerInterface.transform(i));
     }
 
+    /**
+     * Instantiates a new Jm transform processor.
+     *
+     * @param outputPublisherBiConsumer the output publisher bi consumer
+     */
     public JMTransformProcessor(
             BiConsumer<T, JMSubmissionPublisher<? super R>>
                     outputPublisherBiConsumer) {

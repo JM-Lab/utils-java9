@@ -11,6 +11,11 @@ import java.util.function.Consumer;
 import static kr.jm.utils.helper.JMPredicate.getEquals;
 import static kr.jm.utils.helper.JMPredicate.peek;
 
+/**
+ * The type Restful resource updater.
+ *
+ * @param <T> the type parameter
+ */
 public class RestfulResourceUpdater<T> {
 
     private String restfulResourceUrl;
@@ -18,6 +23,12 @@ public class RestfulResourceUpdater<T> {
     private String cachedJsonString;
     private T cachedResource;
 
+    /**
+     * Instantiates a new Restful resource updater.
+     *
+     * @param restfulResourceUrl the restful resource url
+     * @param type               the type
+     */
     public RestfulResourceUpdater(String restfulResourceUrl,
             TypeReference<T> type) {
         super();
@@ -25,6 +36,11 @@ public class RestfulResourceUpdater<T> {
         this.type = type;
     }
 
+    /**
+     * Update resource optional.
+     *
+     * @return the optional
+     */
     public Optional<T> updateResource() {
         return JMOptional.getOptional(JMRestfulResource
                 .getStringWithRestOrClasspathOrFilePath(restfulResourceUrl))
@@ -34,6 +50,11 @@ public class RestfulResourceUpdater<T> {
                 .filter(peek(resource -> this.cachedResource = resource));
     }
 
+    /**
+     * Update resource.
+     *
+     * @param updateConsumer the update consumer
+     */
     public void updateResource(Consumer<T> updateConsumer) {
         updateResource().ifPresent(updateConsumer);
     }
@@ -42,18 +63,38 @@ public class RestfulResourceUpdater<T> {
         this.cachedJsonString = jsonStringCache;
     }
 
+    /**
+     * Gets restful resource url.
+     *
+     * @return the restful resource url
+     */
     public String getRestfulResourceUrl() {
         return restfulResourceUrl;
     }
 
+    /**
+     * Gets type.
+     *
+     * @return the type
+     */
     public TypeReference<T> getType() {
         return type;
     }
 
+    /**
+     * Gets cached json string.
+     *
+     * @return the cached json string
+     */
     public String getCachedJsonString() {
         return cachedJsonString;
     }
 
+    /**
+     * Gets cached resource.
+     *
+     * @return the cached resource
+     */
     public T getCachedResource() {
         return cachedResource;
     }

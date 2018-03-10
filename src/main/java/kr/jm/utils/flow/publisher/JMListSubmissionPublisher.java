@@ -5,6 +5,11 @@ import kr.jm.utils.helper.JMOptional;
 
 import java.util.List;
 
+/**
+ * The type Jm list submission publisher.
+ *
+ * @param <T> the type parameter
+ */
 public class JMListSubmissionPublisher<T> extends
         JMSubmissionPublisher<List<T>> {
 

@@ -11,17 +11,33 @@ import java.util.concurrent.Flow;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Supplier;
 
+/**
+ * The type Jm submission publisher.
+ *
+ * @param <T> the type parameter
+ */
 public class JMSubmissionPublisher<T> implements
         JMSubmissionPublisherInterface<T> {
+    /**
+     * The Log.
+     */
     protected final Logger log = org.slf4j.LoggerFactory.getLogger(getClass());
 
     private SingleSubscription singleSubscription;
     private List<Flow.Subscriber<? super T>> subscriberList;
 
+    /**
+     * Instantiates a new Jm submission publisher.
+     */
     public JMSubmissionPublisher() {
         this(() -> null);
     }
 
+    /**
+     * Instantiates a new Jm submission publisher.
+     *
+     * @param inputSupplier the input supplier
+     */
     public JMSubmissionPublisher(Supplier<T> inputSupplier) {
         this.singleSubscription = new SingleSubscription(inputSupplier);
         this.subscriberList = new ArrayList<>();
@@ -47,6 +63,11 @@ public class JMSubmissionPublisher<T> implements
         private Supplier<T> inputSupplier;
         private AtomicBoolean isCanceled;
 
+        /**
+         * Instantiates a new Single subscription.
+         *
+         * @param inputSupplier the input supplier
+         */
         public SingleSubscription(Supplier<T> inputSupplier) {
             this.inputSupplier = inputSupplier;
             this.isCanceled = new AtomicBoolean(false);

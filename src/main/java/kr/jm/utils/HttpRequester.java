@@ -28,12 +28,23 @@ import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 
+/**
+ * The type Http requester.
+ */
 public class HttpRequester {
     private static final Logger log = org.slf4j.LoggerFactory
             .getLogger(HttpRequester.class);
     private static final Charset UTF_8 = Charset.forName("UTF-8");
     private static CloseableHttpClient HttpClient;
 
+    /**
+     * Gets rest api response as object.
+     *
+     * @param <T>           the type parameter
+     * @param uri           the uri
+     * @param typeReference the type reference
+     * @return the rest api response as object
+     */
     public static <T> T getRestApiResponseAsObject(String uri,
             TypeReference<T> typeReference) {
         try {
@@ -45,19 +56,46 @@ public class HttpRequester {
         }
     }
 
+    /**
+     * Gets response as string.
+     *
+     * @param uri the uri
+     * @return the response as string
+     */
     public static String getResponseAsString(String uri) {
         return request(new HttpGet(uri));
     }
 
+    /**
+     * Gets response as string.
+     *
+     * @param uri         the uri
+     * @param charsetName the charset name
+     * @return the response as string
+     */
     public static String getResponseAsString(String uri, String charsetName) {
         return request(new HttpGet(uri), charsetName);
     }
 
 
+    /**
+     * Gets response as string.
+     *
+     * @param uri    the uri
+     * @param header the header
+     * @return the response as string
+     */
     public static String getResponseAsString(URI uri, Header header) {
         return getResponseAsString(uri.toString(), header);
     }
 
+    /**
+     * Gets response as string.
+     *
+     * @param uri    the uri
+     * @param header the header
+     * @return the response as string
+     */
     public static String getResponseAsString(String uri, Header header) {
         HttpGet httpGet = new HttpGet(uri);
         httpGet.setHeader(header);
@@ -65,6 +103,15 @@ public class HttpRequester {
         return request(httpGet);
     }
 
+    /**
+     * Build uri uri.
+     *
+     * @param httpOrHttps the http or https
+     * @param host        the host
+     * @param path        the path
+     * @param paramMap    the param map
+     * @return the uri
+     */
     public static URI buildUri(String httpOrHttps, String host, String path,
             Map<String, String> paramMap) {
         try {
@@ -77,6 +124,12 @@ public class HttpRequester {
         }
     }
 
+    /**
+     * Build name value pare list list.
+     *
+     * @param keyValueMap the key value map
+     * @return the list
+     */
     public static List<NameValuePair>
     buildNameValuePareList(Map<String, String> keyValueMap) {
         return keyValueMap.entrySet().stream()
@@ -85,11 +138,27 @@ public class HttpRequester {
                 .collect(toList());
     }
 
+    /**
+     * Post response as string string.
+     *
+     * @param uri        the uri
+     * @param header     the header
+     * @param httpEntity the http entity
+     * @return the string
+     */
     public static String postResponseAsString(URI uri, Header header,
             HttpEntity httpEntity) {
         return postResponseAsString(uri.toString(), header, httpEntity);
     }
 
+    /**
+     * Post response as string string.
+     *
+     * @param uri        the uri
+     * @param header     the header
+     * @param httpEntity the http entity
+     * @return the string
+     */
     public static String postResponseAsString(String uri, Header header,
             HttpEntity httpEntity) {
         HttpPost httpPost = new HttpPost(uri);
@@ -98,27 +167,66 @@ public class HttpRequester {
         return request(httpPost);
     }
 
+    /**
+     * Build http entity string entity.
+     *
+     * @param object the object
+     * @return the string entity
+     */
     public static StringEntity buildHttpEntity(Object object) {
         return buildHttpEntity(JMJson.toJsonString(object));
     }
 
+    /**
+     * Build http entity string entity.
+     *
+     * @param string the string
+     * @return the string entity
+     */
     public static StringEntity buildHttpEntity(String string) {
         return buildHttpEntity(string, UTF_8);
     }
 
+    /**
+     * Build http entity string entity.
+     *
+     * @param string  the string
+     * @param charset the charset
+     * @return the string entity
+     */
     public static StringEntity buildHttpEntity(String string, Charset charset) {
         return new StringEntity(string, charset);
     }
 
+    /**
+     * Request string.
+     *
+     * @param httpUriRequest the http uri request
+     * @return the string
+     */
     public static String request(HttpUriRequest httpUriRequest) {
         return request(httpUriRequest, Charset.defaultCharset());
     }
 
+    /**
+     * Request string.
+     *
+     * @param httpUriRequest the http uri request
+     * @param charSetName    the char set name
+     * @return the string
+     */
     public static String request(HttpUriRequest httpUriRequest,
             String charSetName) {
         return request(httpUriRequest, Charset.forName(charSetName));
     }
 
+    /**
+     * Request string.
+     *
+     * @param httpUriRequest the http uri request
+     * @param charSet        the char set
+     * @return the string
+     */
     public static String request(HttpUriRequest httpUriRequest,
             Charset charSet) {
         try (CloseableHttpResponse response =
@@ -136,11 +244,22 @@ public class HttpRequester {
         }
     }
 
+    /**
+     * Gets http client.
+     *
+     * @return the http client
+     */
     public static CloseableHttpClient getHttpClient() {
         return HttpClient == null ? HttpClient = HttpClients.createDefault()
                 : HttpClient;
     }
 
+    /**
+     * Sets http client.
+     *
+     * @param httpClient the http client
+     * @return the http client
+     */
     public static CloseableHttpClient
     setHttpClient(CloseableHttpClient httpClient) {
         return HttpClient = httpClient;
