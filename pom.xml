@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.jm-lab</groupId>
     <artifactId>jmlab-utils-java9</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
     <packaging>jar</packaging>
     <name>JMLab-Utils-Java9</name>
     <description>Java 9 Utility Libraries</description>
@@ -34,11 +34,9 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>9</java.version>
-        <junit.platform.version>1.0.0</junit.platform.version>
-        <junit.jupiter.version>5.0.0</junit.jupiter.version>
         <slf4j.version>1.7.25</slf4j.version>
         <junit.version>4.12</junit.version>
-        <jmlab-utils-java8.version>0.1.90</jmlab-utils-java8.version>
+        <jmlab-utils-java8.version>0.1.91</jmlab-utils-java8.version>
         <jackson-databind.version>2.8.9</jackson-databind.version>
         <httpclient.version>4.5.3</httpclient.version>
     </properties>
@@ -65,21 +63,6 @@
                 </configuration>
             </plugin>
             <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.19</version>
-                <configuration>
-                    <jvm>java</jvm>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.junit.platform</groupId>
-                        <artifactId>junit-platform-surefire-provider
-                        </artifactId>
-                        <version>${junit.platform.version}</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>2.2.1</version>
@@ -97,7 +80,7 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>2.9.1</version>
                 <configuration>
-                    <javadocExecutable>${java.home}/../bin/javadoc
+                    <javadocExecutable>${java.home}/bin/javadoc
                     </javadocExecutable>
                 </configuration>
                 <executions>
@@ -167,12 +150,6 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>${junit.jupiter.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
