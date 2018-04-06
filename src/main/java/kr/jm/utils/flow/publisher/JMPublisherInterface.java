@@ -12,6 +12,7 @@ import java.util.function.Consumer;
  *
  * @param <T> the type parameter
  */
+@SuppressWarnings("ALL")
 public interface JMPublisherInterface<T> extends Flow.Publisher<T> {
 
     /**

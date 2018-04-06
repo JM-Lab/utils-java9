@@ -23,17 +23,18 @@ public class JMJson {
      * The constant MAP_TYPE_REFERENCE.
      */
     public static final TypeReference<Map<String, Object>> MAP_TYPE_REFERENCE =
-            getTypeReference();
+            getMapOrListTypeReference();
     /**
      * The constant LIST_TYPE_REFERENCE.
      */
     public static final TypeReference<List<Object>> LIST_TYPE_REFERENCE =
-            getTypeReference();
+            getMapOrListTypeReference();
     /**
      * The constant LIST_MAP_TYPE_REFERENCE.
      */
     public static final TypeReference<List<Map<String, Object>>>
-            LIST_MAP_TYPE_REFERENCE = getTypeReference();
+            LIST_MAP_TYPE_REFERENCE = getMapOrListTypeReference();
+
     private static ObjectMapper jsonMapper = new ObjectMapper()
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
             .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
@@ -385,6 +386,7 @@ public class JMJson {
         }
     }
 
+
     /**
      * With json input stream or null t.
      *
@@ -556,13 +558,14 @@ public class JMJson {
         return withJsonString(toJsonString(object), transformTypeReference);
     }
 
+
     /**
      * Gets type reference.
      *
      * @param <T> the type parameter
      * @return the type reference
      */
-    public static <T> TypeReference<T> getTypeReference() {
+    public static <T> TypeReference<T> getMapOrListTypeReference() {
         return new TypeReference<>() {};
     }
 }

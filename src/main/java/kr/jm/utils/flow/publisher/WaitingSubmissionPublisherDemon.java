@@ -2,7 +2,6 @@ package kr.jm.utils.flow.publisher;
 
 import kr.jm.utils.helper.JMLog;
 import kr.jm.utils.helper.JMThread;
-import org.slf4j.Logger;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Flow;
@@ -19,9 +18,6 @@ import static kr.jm.utils.helper.JMThread.shutdownNowAndWaitToBeTerminated;
  */
 public class WaitingSubmissionPublisherDemon<T> extends
         WaitingSubmissionPublisher<T> {
-
-    private static final Logger log = org.slf4j.LoggerFactory
-            .getLogger(WaitingSubmissionPublisherDemon.class);
 
     private ExecutorService executorService;
     private Supplier<T> dataSupplier;

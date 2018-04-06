@@ -15,8 +15,8 @@ import java.util.function.Consumer;
  */
 public class JMSubscriber<T> implements Flow.Subscriber<T> {
 
-    private static final Logger log =
-            org.slf4j.LoggerFactory.getLogger(JMSubscriber.class);
+    protected final Logger log = org.slf4j.LoggerFactory.getLogger(getClass());
+
     private Flow.Subscription subscription;
     private Consumer<T> itemConsumer;
 

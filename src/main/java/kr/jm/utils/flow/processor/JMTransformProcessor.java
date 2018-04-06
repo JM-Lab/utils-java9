@@ -18,8 +18,8 @@ import java.util.function.BiConsumer;
  */
 public class JMTransformProcessor<T, R> implements
         JMTransformProcessorInterface<T, R> {
-    private static final Logger log =
-            org.slf4j.LoggerFactory.getLogger(JMTransformProcessor.class);
+    protected final Logger log =
+            org.slf4j.LoggerFactory.getLogger(getClass());
     private JMSubscriber<T> inputSubscriber;
     private JMSubmissionPublisher<R> outputPublisher;
 

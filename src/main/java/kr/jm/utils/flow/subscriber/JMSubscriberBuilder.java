@@ -39,8 +39,7 @@ public class JMSubscriberBuilder {
      */
     public static <I> JMSubscriber<I> getSOPLSubscriber(
             Function<I, ?> transformFunction) {
-        return build(
-                o -> System.out.println(transformFunction.apply(o)));
+        return build(o -> System.out.println(transformFunction.apply(o)));
     }
 
     /**

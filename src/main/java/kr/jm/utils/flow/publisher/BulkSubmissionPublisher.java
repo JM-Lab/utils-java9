@@ -11,6 +11,7 @@ import java.util.*;
  *
  * @param <T> the type parameter
  */
+@SuppressWarnings("SynchronizeOnNonFinalField")
 public class BulkSubmissionPublisher<T> extends JMListSubmissionPublisher<T> {
 
     /**
@@ -67,8 +68,8 @@ public class BulkSubmissionPublisher<T> extends JMListSubmissionPublisher<T> {
         this.flushIntervalMillis = flushIntervalSeconds * 1000;
         this.dataList = new ArrayList<>();
         this.lastDataTimestamp = Long.MAX_VALUE;
-        JMThread.runWithScheduleAtFixedRate(0, flushIntervalMillis,
-                this::checkIntervalAndFlush);
+        JMThread.runWithScheduleAtFixedRate(flushIntervalMillis,
+                flushIntervalMillis, this::checkIntervalAndFlush);
     }
 
     private void checkIntervalAndFlush() {

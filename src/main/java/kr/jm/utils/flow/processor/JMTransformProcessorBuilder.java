@@ -2,7 +2,6 @@ package kr.jm.utils.flow.processor;
 
 import kr.jm.utils.flow.TransformerInterface;
 import kr.jm.utils.flow.publisher.JMSubmissionPublisher;
-import kr.jm.utils.helper.JMConsumer;
 
 import java.util.Collection;
 import java.util.concurrent.Executor;
@@ -21,7 +20,7 @@ public class JMTransformProcessorBuilder {
      * @return the jm transform processor interface
      */
     public static <O, I extends Collection<O>> JMTransformProcessorInterface<I, O> buildCollectionEach() {
-        return build((collection, singleSubmissionPublisher) -> collection
+        return buildBi((collection, singleSubmissionPublisher) -> collection
                 .forEach(singleSubmissionPublisher::submit));
     }
 
@@ -36,20 +35,9 @@ public class JMTransformProcessorBuilder {
      */
     public static <O, I extends Collection<O>, R> JMTransformProcessorInterface<I, R> buildCollectionEach(
             TransformerInterface<O, R> eachTransformer) {
-        try {
-            return build(
-                    (collection, singleSubmissionPublisher) -> collection
-                            .stream()
-                            .map(eachTransformer::transform)
-                            .peek(JMConsumer.getSOPL())
-                            .forEach(singleSubmissionPublisher::submit));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return build(
+        return buildBi(
                 (collection, singleSubmissionPublisher) -> collection.stream()
                         .map(eachTransformer::transform)
-                        .peek(JMConsumer.getSOPL())
                         .forEach(singleSubmissionPublisher::submit));
     }
 
@@ -155,7 +143,7 @@ public class JMTransformProcessorBuilder {
      * @param singlePublisherBiConsumer the single publisher bi consumer
      * @return the jm transform processor interface
      */
-    public static <I, O> JMTransformProcessorInterface<I, O> build(
+    public static <I, O> JMTransformProcessorInterface<I, O> buildBi(
             BiConsumer<I, JMSubmissionPublisher<? super O>> singlePublisherBiConsumer) {
         return new JMTransformProcessor<>(singlePublisherBiConsumer);
     }

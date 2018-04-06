@@ -67,7 +67,7 @@ public class WaitingSubmissionPublisher<T> extends
     }
 
     private boolean checkSuspendCondition(int lag, int waitCount) {
-        if (lag < queueSizeLimit)
+        if (isClosed() || lag < queueSizeLimit)
             return false;
         logWaiting(lag, waitCount);
         return true;

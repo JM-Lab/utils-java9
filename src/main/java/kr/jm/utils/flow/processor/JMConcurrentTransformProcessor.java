@@ -5,7 +5,6 @@ import kr.jm.utils.flow.publisher.JMSubmissionPublisher;
 import kr.jm.utils.flow.subscriber.JMSubscriberBuilder;
 import kr.jm.utils.helper.JMLog;
 import kr.jm.utils.helper.JMThread;
-import org.slf4j.Logger;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Flow;
@@ -20,9 +19,7 @@ import java.util.function.BiConsumer;
  */
 public class JMConcurrentTransformProcessor<T, R> extends
         JMTransformProcessor<T, R> implements AutoCloseable {
-    private static final Logger log =
-            org.slf4j.LoggerFactory
-                    .getLogger(JMConcurrentTransformProcessor.class);
+
     private SubmissionPublisher<R> submissionPublisher;
 
     /**
