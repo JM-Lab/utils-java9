@@ -568,4 +568,21 @@ public class JMJson {
     public static <T> TypeReference<T> getMapOrListTypeReference() {
         return new TypeReference<>() {};
     }
+
+    public static String toPrettyString(String jsonString) {
+        return toPrettyJsonString(
+                withJsonString(jsonString, Object.class));
+    }
+
+    public static String toPrettyJsonString(Object object) {
+        try {
+            return jsonMapper.writerWithDefaultPrettyPrinter()
+                    .writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            return JMExceptionManager.handleExceptionAndReturnNull(log, e,
+                    "toPrettyJsonString", object);
+        }
+    }
+
+
 }
