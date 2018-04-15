@@ -31,20 +31,12 @@ Checkout the source code:
 ## Useful Utilities With New Features Of Java 9  :
 * **Flow Package ([Reactive Programming with JDK 9 Flow API](https://community.oracle.com/docs/DOC-1006738) Utility)**
 
-`JMSubmissionPublisher`
-`BulkSubmissionPublisher`
-`StringListSubmissionPublisher`
-`StringBulkSubmissionPublisher`
-`WaitingSubmissionPublisher`
-`WaitingBulkSubmissionPublisher`
-`BulkWaitingSubmissionPublisher`
+`JMSubmissionPublisher` `BulkSubmissionPublisher` 
+`StringListSubmissionPublisher` `StringBulkSubmissionPublisher` `StdInLinePublisher` `WaitingSubmissionPublisher` `WaitingBulkSubmissionPublisher` `BulkWaitingSubmissionPublisher`
 
-`JMTransformProcessor`
-`JMConcurrentTransformProcessor`
-`JMTransformProcessorBuilder`
+`JMTransformProcessor` `JMConcurrentTransformProcessor` `JMTransformProcessorBuilder`
 
-`JMSubscriber`
-`JMSubscriberBuilder`
+`JMSubscriber` `JMSubscriberBuilder`
 * **JMJson**
 * **RestfulResourceUpdater**
 * **etc.**
