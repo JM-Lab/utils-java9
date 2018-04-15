@@ -569,11 +569,23 @@ public class JMJson {
         return new TypeReference<>() {};
     }
 
+    /**
+     * To pretty string string.
+     *
+     * @param jsonString the json string
+     * @return the string
+     */
     public static String toPrettyString(String jsonString) {
         return toPrettyJsonString(
                 withJsonString(jsonString, Object.class));
     }
 
+    /**
+     * To pretty json string string.
+     *
+     * @param object the object
+     * @return the string
+     */
     public static String toPrettyJsonString(Object object) {
         try {
             return jsonMapper.writerWithDefaultPrettyPrinter()
