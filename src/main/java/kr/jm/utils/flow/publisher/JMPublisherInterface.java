@@ -22,10 +22,15 @@ public interface JMPublisherInterface<T> extends Flow.Publisher<T> {
      * @param returnSubscriber the return subscriber
      * @return the r
      */
-    default <R extends Flow.Subscriber<T>> R subscribeAndReturn(
+    default <R extends Flow.Subscriber<T>> R subscribeAndReturnSubcriber(
             R returnSubscriber) {
         subscribe(returnSubscriber);
         return returnSubscriber;
+    }
+
+    default Flow.Subscriber<T> consumeAndReturnSubscriber(
+            Consumer<T> consumer) {
+        return subscribeAndReturnSubcriber(JMSubscriberBuilder.build(consumer));
     }
 
     /**
@@ -44,11 +49,11 @@ public interface JMPublisherInterface<T> extends Flow.Publisher<T> {
     /**
      * Consume with jm publisher interface.
      *
-     * @param itemConsumers the item consumers
+     * @param consumers the item consumers
      * @return the jm publisher interface
      */
-    default JMPublisherInterface<T> consumeWith(Consumer<T>... itemConsumers) {
-        JMOptional.getOptional(itemConsumers).map(Arrays::stream)
+    default JMPublisherInterface<T> consumeWith(Consumer<T>... consumers) {
+        JMOptional.getOptional(consumers).map(Arrays::stream)
                 .ifPresent(stream -> stream.map(JMSubscriberBuilder::build)
                         .forEach(this::subscribe));
         return this;

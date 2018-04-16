@@ -29,17 +29,17 @@ public class JMTransformProcessorBuilderTest {
                 StringListSubmissionPublisher();
         JMTransformProcessorInterface<List<String>, String>
                 listStringJMTransformProcessor =
-                listSubmissionPublisher.subscribeAndReturn(
+                listSubmissionPublisher.subscribeAndReturnSubcriber(
                         JMTransformProcessorBuilder.buildCollectionEach());
-        listStringJMTransformProcessor.subscribeAndReturn(
+        listStringJMTransformProcessor.subscribeAndReturnSubcriber(
                 JMSubscriberBuilder.getSOPLSubscriber());
         JMTransformProcessorInterface<List<String>, List<String>>
                 listStringJMTransformProcessor2 =
-                listSubmissionPublisher.subscribeAndReturn(
+                listSubmissionPublisher.subscribeAndReturnSubcriber(
                         JMTransformProcessorBuilder.buildCollectionEach
                                 (line -> Arrays
                                         .asList(JMWordSplitter.split(line))));
-        listStringJMTransformProcessor2.subscribeAndReturn(
+        listStringJMTransformProcessor2.subscribeAndReturnSubcriber(
                 JMSubscriberBuilder.getSOPLSubscriber());
         listSubmissionPublisher.submit(lineList);
     }

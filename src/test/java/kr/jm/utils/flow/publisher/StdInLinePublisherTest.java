@@ -42,7 +42,7 @@ public class StdInLinePublisherTest {
         List<String> resultLineList = new ArrayList<>();
         this.stdInLinePublisher
                 .subscribeWith(JMSubscriberBuilder.getSOPLSubscriber())
-                .subscribeAndReturn(
+                .subscribeAndReturnSubcriber(
                         JMSubscriberBuilder.build(resultLineList::add));
         this.stdInLinePublisher.consumeStdIn();
         JMThread.sleep(1000);
