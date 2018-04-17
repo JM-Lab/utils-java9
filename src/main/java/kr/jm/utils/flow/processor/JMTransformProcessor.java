@@ -1,6 +1,5 @@
 package kr.jm.utils.flow.processor;
 
-import kr.jm.utils.flow.TransformerInterface;
 import kr.jm.utils.flow.publisher.JMSubmissionPublisher;
 import kr.jm.utils.flow.subscriber.JMSubscriber;
 import kr.jm.utils.flow.subscriber.JMSubscriberBuilder;
@@ -9,6 +8,7 @@ import org.slf4j.Logger;
 
 import java.util.concurrent.Flow;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 /**
  * The type Jm transform processor.
@@ -29,25 +29,24 @@ public class JMTransformProcessor<T, R> implements
     /**
      * Instantiates a new Jm transform processor.
      *
-     * @param transformerInterface the transformer interface
+     * @param transformerFunction the transformer interface
      */
     public JMTransformProcessor(
-            TransformerInterface<T, R> transformerInterface) {
-        this(getSingleInputPublisherBiConsumer(transformerInterface));
+            Function<T, R> transformerFunction) {
+        this(getSingleInputPublisherBiConsumer(transformerFunction));
     }
 
     /**
      * Gets single input publisher bi consumer.
      *
-     * @param <I>                  the type parameter
-     * @param <O>                  the type parameter
-     * @param transformerInterface the transformer interface
+     * @param <I>                 the type parameter
+     * @param <O>                 the type parameter
+     * @param transformerFunction the transformer interface
      * @return the single input publisher bi consumer
      */
     protected static <I, O> BiConsumer<I, JMSubmissionPublisher<? super O>>
-    getSingleInputPublisherBiConsumer(
-            TransformerInterface<I, O> transformerInterface) {
-        return (i, s) -> s.submit(transformerInterface.transform(i));
+    getSingleInputPublisherBiConsumer(Function<I, O> transformerFunction) {
+        return (i, s) -> s.submit(transformerFunction.apply(i));
     }
 
     /**

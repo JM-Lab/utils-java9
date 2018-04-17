@@ -1,7 +1,6 @@
 package kr.jm.utils.flow.processor;
 
 import kr.jm.utils.JMWordSplitter;
-import kr.jm.utils.flow.TransformerInterface;
 import kr.jm.utils.flow.publisher.WaitingSubmissionPublisher;
 import kr.jm.utils.flow.subscriber.JMSubscriberBuilder;
 import kr.jm.utils.helper.JMResources;
@@ -13,6 +12,7 @@ import org.junit.Test;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 
 public class SingleSubscriberProcessorTest {
 
@@ -25,10 +25,11 @@ public class SingleSubscriberProcessorTest {
     public void setUp() {
         this.singleTransformProcessor =
                 new JMTransformProcessor<>(
-                        (TransformerInterface<String, List<String>>) JMWordSplitter::splitAsList);
+                        (Function<String, List<String>>)
+                                JMWordSplitter::splitAsList);
         this.singleTransformWithThreadPoolProcessor =
                 new JMConcurrentTransformProcessor<>(3,
-                        (TransformerInterface<String, List<String>>) JMWordSplitter::splitAsList);
+                        (Function<String, List<String>>) JMWordSplitter::splitAsList);
     }
 
     @After

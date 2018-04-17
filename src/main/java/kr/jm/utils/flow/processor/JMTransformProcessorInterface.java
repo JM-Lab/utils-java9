@@ -1,9 +1,9 @@
 package kr.jm.utils.flow.processor;
 
-import kr.jm.utils.flow.TransformerInterface;
 import kr.jm.utils.flow.publisher.JMPublisherInterface;
 
 import java.util.concurrent.Flow;
+import java.util.function.Function;
 
 /**
  * The interface Jm transform processor interface.
@@ -27,15 +27,29 @@ public interface JMTransformProcessorInterface<T, R> extends
         return returnTransformProcessor;
     }
 
+    /**
+     * Subscribe and return processor jm transform processor interface.
+     *
+     * @param <O>                 the type parameter
+     * @param transformerFunction the transformer function
+     * @return the jm transform processor interface
+     */
     default <O> JMTransformProcessorInterface<R, O> subscribeAndReturnProcessor(
-            TransformerInterface<R, O> transformerInterface) {
+            Function<R, O> transformerFunction) {
         return subscribeAndReturnProcessor(
-                JMTransformProcessorBuilder.build(transformerInterface));
+                JMTransformProcessorBuilder.build(transformerFunction));
     }
 
+    /**
+     * Subscribe and return processor with thread pool jm transform processor interface.
+     *
+     * @param <O>                 the type parameter
+     * @param transformerFunction the transformer function
+     * @return the jm transform processor interface
+     */
     default <O> JMTransformProcessorInterface<R, O> subscribeAndReturnProcessorWithThreadPool(
-            TransformerInterface<R, O> transformerInterface) {
+            Function<R, O> transformerFunction) {
         return subscribeAndReturnProcessor(JMTransformProcessorBuilder
-                .buildWithThreadPool(transformerInterface));
+                .buildWithThreadPool(transformerFunction));
     }
 }

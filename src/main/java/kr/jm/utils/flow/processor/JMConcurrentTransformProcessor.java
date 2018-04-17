@@ -1,6 +1,5 @@
 package kr.jm.utils.flow.processor;
 
-import kr.jm.utils.flow.TransformerInterface;
 import kr.jm.utils.flow.publisher.JMSubmissionPublisher;
 import kr.jm.utils.flow.subscriber.JMSubscriberBuilder;
 import kr.jm.utils.helper.JMLog;
@@ -10,6 +9,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Flow;
 import java.util.concurrent.SubmissionPublisher;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 /**
  * The type Jm concurrent transform processor.
@@ -25,36 +25,36 @@ public class JMConcurrentTransformProcessor<T, R> extends
     /**
      * Instantiates a new Jm concurrent transform processor.
      *
-     * @param transformerInterface the transformer interface
+     * @param transformerFunction the transformer interface
      */
     public JMConcurrentTransformProcessor(
-            TransformerInterface<T, R> transformerInterface) {
-        this(Flow.defaultBufferSize(), transformerInterface);
+            Function<T, R> transformerFunction) {
+        this(Flow.defaultBufferSize(), transformerFunction);
     }
 
     /**
      * Instantiates a new Jm concurrent transform processor.
      *
-     * @param maxBufferCapacity    the max buffer capacity
-     * @param transformerInterface the transformer interface
+     * @param maxBufferCapacity   the max buffer capacity
+     * @param transformerFunction the transformer interface
      */
     public JMConcurrentTransformProcessor(int maxBufferCapacity,
-            TransformerInterface<T, R> transformerInterface) {
-        this(null, maxBufferCapacity, transformerInterface);
+            Function<T, R> transformerFunction) {
+        this(null, maxBufferCapacity, transformerFunction);
     }
 
     /**
      * Instantiates a new Jm concurrent transform processor.
      *
-     * @param executor             the executor
-     * @param maxBufferCapacity    the max buffer capacity
-     * @param transformerInterface the transformer interface
+     * @param executor            the executor
+     * @param maxBufferCapacity   the max buffer capacity
+     * @param transformerFunction the transformer interface
      */
     public JMConcurrentTransformProcessor(Executor executor,
             int maxBufferCapacity,
-            TransformerInterface<T, R> transformerInterface) {
+            Function<T, R> transformerFunction) {
         this(executor, maxBufferCapacity,
-                getSingleInputPublisherBiConsumer(transformerInterface));
+                getSingleInputPublisherBiConsumer(transformerFunction));
     }
 
     /**
