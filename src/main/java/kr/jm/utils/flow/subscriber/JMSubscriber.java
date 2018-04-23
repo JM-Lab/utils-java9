@@ -21,15 +21,23 @@ public class JMSubscriber<T> implements Flow.Subscriber<T> {
     protected final Logger log = org.slf4j.LoggerFactory.getLogger(getClass());
 
     private Flow.Subscription subscription;
-    private Consumer<T> itemConsumer;
+    private Consumer<T> dataConsumer;
+
+    protected JMSubscriber() {
+        this.dataConsumer =
+                d -> JMExceptionManager.logException(log,
+                        JMExceptionManager.newRunTimeException(
+                                "DataConsumer Wasn't Set !!! - Flush " + d),
+                        "JMSubscriber");
+    }
 
     /**
      * Instantiates a new Jm subscriber.
      *
-     * @param itemConsumer the item consumer
+     * @param dataConsumer the item consumer
      */
-    public JMSubscriber(Consumer<T> itemConsumer) {
-        this.itemConsumer = itemConsumer;
+    public JMSubscriber(Consumer<T> dataConsumer) {
+        setDataConsumer(dataConsumer);
     }
 
     @Override
@@ -45,7 +53,7 @@ public class JMSubscriber<T> implements Flow.Subscriber<T> {
     @Override
     public void onNext(T item) {
         JMLog.debug(log, "onNext", item);
-        Optional.ofNullable(item).ifPresent(itemConsumer);
+        Optional.ofNullable(item).ifPresent(this.dataConsumer);
         Optional.ofNullable(this.subscription).ifPresent(this::requestNext);
     }
 
@@ -57,5 +65,9 @@ public class JMSubscriber<T> implements Flow.Subscriber<T> {
     @Override
     public void onComplete() {
         JMLog.info(log, "onComplete");
+    }
+
+    public void setDataConsumer(Consumer<T> dataConsumer) {
+        this.dataConsumer = dataConsumer;
     }
 }
