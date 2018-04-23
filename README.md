@@ -14,7 +14,7 @@ compile 'kr.jmlab:jmlab-utils-java9:0.1.1'
 Maven:
 ```xml
 <dependency>
-    <groupId>com.github.jm-lab</groupId>
+    <groupId>kr.jmlab</groupId>
     <artifactId>jmlab-utils-java9</artifactId>
     <version>0.1.1</version>
 </dependency>
