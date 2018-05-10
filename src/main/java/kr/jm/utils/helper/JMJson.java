@@ -17,6 +17,7 @@ import java.util.Map;
  * The type Jm json.
  */
 public class JMJson {
+
     private static final Logger log =
             org.slf4j.LoggerFactory.getLogger(JMJson.class);
     /**
@@ -35,6 +36,16 @@ public class JMJson {
     public static final TypeReference<List<Map<String, Object>>>
             LIST_MAP_TYPE_REFERENCE = getMapOrListTypeReference();
 
+    /**
+     * Gets map or list type reference.
+     *
+     * @param <T> the type parameter
+     * @return the map or list type reference
+     */
+    public static <T> TypeReference<T> getMapOrListTypeReference() {
+        return new TypeReference<>() {};
+    }
+
     private static ObjectMapper jsonMapper = new ObjectMapper()
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
             .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
@@ -50,24 +61,9 @@ public class JMJson {
     public static <D> String toJsonString(D dataObject) {
         try {
             return jsonMapper.writeValueAsString(dataObject);
-        } catch (JsonProcessingException e) {
+        } catch (Exception e) {
             return JMExceptionManager.handleExceptionAndReturnNull(log, e,
                     "toJsonString", dataObject);
-        }
-    }
-
-    /**
-     * To json string or null string.
-     *
-     * @param <D>        the type parameter
-     * @param dataObject the data object
-     * @return the string
-     */
-    public static <D> String toJsonStringOrNull(D dataObject) {
-        try {
-            return jsonMapper.writeValueAsString(dataObject);
-        } catch (JsonProcessingException e) {
-            return null;
         }
     }
 
@@ -99,23 +95,6 @@ public class JMJson {
     }
 
     /**
-     * To json file or null file.
-     *
-     * @param jsonString     the json string
-     * @param returnJsonFile the return json file
-     * @return the file
-     */
-    public static File toJsonFileOrNull(String jsonString,
-            File returnJsonFile) {
-        try {
-            jsonMapper.writeValue(returnJsonFile, jsonString);
-            return returnJsonFile;
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    /**
      * To json file file.
      *
      * @param <D>            the type parameter
@@ -133,23 +112,6 @@ public class JMJson {
         }
     }
 
-    /**
-     * To json file or null file.
-     *
-     * @param <D>            the type parameter
-     * @param dataObject     the data object
-     * @param returnJsonFile the return json file
-     * @return the file
-     */
-    public static <D> File toJsonFileOrNull(D dataObject, File returnJsonFile) {
-        try {
-            jsonMapper.writeValue(returnJsonFile, dataObject);
-            return returnJsonFile;
-        } catch (Exception e) {
-            return JMExceptionManager.handleExceptionAndReturnNull(log, e,
-                    "toJsonFile", dataObject);
-        }
-    }
 
     /**
      * With bytes t.
@@ -170,23 +132,6 @@ public class JMJson {
     }
 
     /**
-     * With bytes or null t.
-     *
-     * @param <T>           the type parameter
-     * @param bytes         the bytes
-     * @param typeReference the type reference
-     * @return the t
-     */
-    public static <T> T withBytesOrNull(byte[] bytes,
-            TypeReference<T> typeReference) {
-        try {
-            return jsonMapper.readValue(bytes, typeReference);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    /**
      * With bytes t.
      *
      * @param <T>   the type parameter
@@ -200,22 +145,6 @@ public class JMJson {
         } catch (Exception e) {
             return JMExceptionManager.handleExceptionAndReturnNull(log, e,
                     "withBytes", new String(bytes));
-        }
-    }
-
-    /**
-     * With bytes or null t.
-     *
-     * @param <T>   the type parameter
-     * @param bytes the bytes
-     * @param c     the c
-     * @return the t
-     */
-    public static <T> T withBytesOrNull(byte[] bytes, Class<T> c) {
-        try {
-            return jsonMapper.readValue(bytes, c);
-        } catch (Exception e) {
-            return null;
         }
     }
 
@@ -264,19 +193,6 @@ public class JMJson {
     }
 
     /**
-     * With json string or null t.
-     *
-     * @param <T>           the type parameter
-     * @param jsonString    the json string
-     * @param typeReference the type reference
-     * @return the t
-     */
-    public static <T> T withJsonStringOrNull(String jsonString,
-            TypeReference<T> typeReference) {
-        return withBytesOrNull(jsonString.getBytes(), typeReference);
-    }
-
-    /**
      * With json string t.
      *
      * @param <T>        the type parameter
@@ -286,18 +202,6 @@ public class JMJson {
      */
     public static <T> T withJsonString(String jsonString, Class<T> c) {
         return withBytes(jsonString.getBytes(), c);
-    }
-
-    /**
-     * With json string or null t.
-     *
-     * @param <T>        the type parameter
-     * @param jsonString the json string
-     * @param c          the c
-     * @return the t
-     */
-    public static <T> T withJsonStringOrNull(String jsonString, Class<T> c) {
-        return withBytesOrNull(jsonString.getBytes(), c);
     }
 
     /**
@@ -319,23 +223,6 @@ public class JMJson {
     }
 
     /**
-     * With json file or null t.
-     *
-     * @param <T>           the type parameter
-     * @param jsonFile      the json file
-     * @param typeReference the type reference
-     * @return the t
-     */
-    public static <T> T withJsonFileOrNull(File jsonFile,
-            TypeReference<T> typeReference) {
-        try {
-            return jsonMapper.readValue(jsonFile, typeReference);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    /**
      * With json file t.
      *
      * @param <T>      the type parameter
@@ -353,22 +240,6 @@ public class JMJson {
     }
 
     /**
-     * With json file or null t.
-     *
-     * @param <T>      the type parameter
-     * @param jsonFile the json file
-     * @param c        the c
-     * @return the t
-     */
-    public static <T> T withJsonFileOrNull(File jsonFile, Class<T> c) {
-        try {
-            return jsonMapper.readValue(jsonFile, c);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    /**
      * With json input stream t.
      *
      * @param <T>           the type parameter
@@ -383,24 +254,6 @@ public class JMJson {
         } catch (Exception e) {
             return JMExceptionManager.handleExceptionAndReturnNull(log, e,
                     "withJsonInputStream", inputStream);
-        }
-    }
-
-
-    /**
-     * With json input stream or null t.
-     *
-     * @param <T>           the type parameter
-     * @param inputStream   the input stream
-     * @param typeReference the type reference
-     * @return the t
-     */
-    public static <T> T withJsonInputStreamOrNull(InputStream inputStream,
-            TypeReference<T> typeReference) {
-        try {
-            return jsonMapper.readValue(inputStream, typeReference);
-        } catch (Exception e) {
-            return null;
         }
     }
 
@@ -419,23 +272,6 @@ public class JMJson {
         } catch (Exception e) {
             return JMExceptionManager.handleExceptionAndReturnNull(log, e,
                     "withJsonInputStream", inputStream);
-        }
-    }
-
-    /**
-     * With json input stream or null t.
-     *
-     * @param <T>         the type parameter
-     * @param inputStream the input stream
-     * @param c           the c
-     * @return the t
-     */
-    public static <T> T withJsonInputStreamOrNull(InputStream inputStream,
-            Class<T> c) {
-        try {
-            return jsonMapper.readValue(inputStream, c);
-        } catch (Exception e) {
-            return null;
         }
     }
 
@@ -534,39 +370,51 @@ public class JMJson {
     }
 
     /**
-     * Convert map map.
+     * Transform to map map.
      *
-     * @param <T>      the type parameter
-     * @param pojoBean the pojo bean
+     * @param <T>    the type parameter
+     * @param object the object
      * @return the map
      */
-    public static <T> Map<String, Object> convertMap(T pojoBean) {
-        return transform(pojoBean, MAP_TYPE_REFERENCE);
+    public static <T> Map<String, Object> transformToMap(T object) {
+        return transform(object, MAP_TYPE_REFERENCE);
     }
 
     /**
      * Transform t 2.
      *
-     * @param <T1>                   the type parameter
-     * @param <T2>                   the type parameter
-     * @param object                 the object
-     * @param transformTypeReference the transform type reference
+     * @param <T1>          the type parameter
+     * @param <T2>          the type parameter
+     * @param object        the object
+     * @param typeReference the type reference
      * @return the t 2
      */
     public static <T1, T2> T2 transform(T1 object,
-            TypeReference<T2> transformTypeReference) {
-        return withJsonString(toJsonString(object), transformTypeReference);
+            TypeReference<T2> typeReference) {
+        try {
+            return jsonMapper.convertValue(object, typeReference);
+        } catch (Exception e) {
+            return JMExceptionManager.handleExceptionAndReturnNull(log, e,
+                    "transform", object);
+        }
     }
 
-
     /**
-     * Gets type reference.
+     * Transform t 2.
      *
-     * @param <T> the type parameter
-     * @return the type reference
+     * @param <T1>      the type parameter
+     * @param <T2>      the type parameter
+     * @param object    the object
+     * @param typeClass the type class
+     * @return the t 2
      */
-    public static <T> TypeReference<T> getMapOrListTypeReference() {
-        return new TypeReference<>() {};
+    public static <T1, T2> T2 transform(T1 object, Class<T2> typeClass) {
+        try {
+            return jsonMapper.convertValue(object, typeClass);
+        } catch (Exception e) {
+            return JMExceptionManager.handleExceptionAndReturnNull(log, e,
+                    "transform", object);
+        }
     }
 
     /**
