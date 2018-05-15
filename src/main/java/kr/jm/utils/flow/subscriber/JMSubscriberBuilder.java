@@ -55,6 +55,26 @@ public class JMSubscriberBuilder {
                 o -> JMJson.toJsonString(transformFunction.apply(o)));
     }
 
+    public static <I> JMFileSubscriber<I> getFileSubscriber(String filePath) {
+        return new JMFileSubscriber<>(filePath);
+    }
+
+    /**
+     * Build file to json string output subscriber.
+     *
+     * @param filePath the file path
+     * @return the output subscriber
+     */
+    public static <I> JMFileSubscriber<I> buildJsonStringFileSubscriber(
+            String filePath) {
+        return new JMFileSubscriber<>(filePath, true);
+    }
+
+    public static <I> JMFileSubscriber<I> buildJsonStringFileSubscriber(
+            String filePath, Function<Object, String> toStringFunction) {
+        return new JMFileSubscriber<>(filePath, toStringFunction);
+    }
+
     /**
      * Build jm subscriber.
      *
