@@ -12,14 +12,14 @@ import static kr.jm.utils.helper.JMPredicate.getEquals;
 import static kr.jm.utils.helper.JMPredicate.peek;
 
 /**
- * The type Restful resource updater.
+ * The typeReference Restful resource updater.
  *
- * @param <T> the type parameter
+ * @param <T> the typeReference parameter
  */
 public class RestfulResourceUpdater<T> {
 
     private String restfulResourceUrl;
-    private TypeReference<T> type;
+    private TypeReference<T> typeReference;
     private String cachedJsonString;
     private T cachedResource;
 
@@ -27,13 +27,11 @@ public class RestfulResourceUpdater<T> {
      * Instantiates a new Restful resource updater.
      *
      * @param restfulResourceUrl the restful resource url
-     * @param type               the type
      */
-    public RestfulResourceUpdater(String restfulResourceUrl,
-            TypeReference<T> type) {
+    public RestfulResourceUpdater(String restfulResourceUrl) {
         super();
         this.restfulResourceUrl = restfulResourceUrl;
-        this.type = type;
+        this.typeReference = new TypeReference<>() {};
     }
 
     /**
@@ -46,7 +44,8 @@ public class RestfulResourceUpdater<T> {
                 .getStringWithRestOrClasspathOrFilePath(restfulResourceUrl))
                 .filter(getEquals(cachedJsonString).negate())
                 .filter(peek(this::setJsonStringCache))
-                .map(jsonString -> JMJson.withJsonString(jsonString, type))
+                .map(jsonString -> JMJson.withJsonString(jsonString,
+                        typeReference))
                 .filter(peek(resource -> this.cachedResource = resource));
     }
 
@@ -73,12 +72,12 @@ public class RestfulResourceUpdater<T> {
     }
 
     /**
-     * Gets type.
+     * Gets typeReference.
      *
-     * @return the type
+     * @return the typeReference
      */
-    public TypeReference<T> getType() {
-        return type;
+    public TypeReference<T> getTypeReference() {
+        return typeReference;
     }
 
     /**
