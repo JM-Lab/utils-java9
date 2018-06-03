@@ -25,7 +25,7 @@ public class JMConcurrentTransformProcessor<T, R> extends
     /**
      * Instantiates a new Jm concurrent transform processor.
      *
-     * @param transformerFunction the transformer interface
+     * @param transformerFunction the transformer function
      */
     public JMConcurrentTransformProcessor(
             Function<T, R> transformerFunction) {
@@ -36,7 +36,7 @@ public class JMConcurrentTransformProcessor<T, R> extends
      * Instantiates a new Jm concurrent transform processor.
      *
      * @param maxBufferCapacity   the max buffer capacity
-     * @param transformerFunction the transformer interface
+     * @param transformerFunction the transformer function
      */
     public JMConcurrentTransformProcessor(int maxBufferCapacity,
             Function<T, R> transformerFunction) {
@@ -48,7 +48,7 @@ public class JMConcurrentTransformProcessor<T, R> extends
      *
      * @param executor            the executor
      * @param maxBufferCapacity   the max buffer capacity
-     * @param transformerFunction the transformer interface
+     * @param transformerFunction the transformer function
      */
     public JMConcurrentTransformProcessor(Executor executor,
             int maxBufferCapacity,

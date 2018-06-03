@@ -1,7 +1,7 @@
 JMLab Java 9 Utility Libraries
 ==============================
 ## version
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/kr.jmlab/jmlab-utils-java9/badge.svg)](http://search.maven.org/#artifactdetails%7Ckr.jmlab%7Cjmlab-utils-java9%7C0.1.1%7Cjar)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/kr.jmlab/jmlab-utils-java9/badge.svg)](http://search.maven.org/#artifactdetails%7Ckr.jmlab%7Cjmlab-utils-java9%7C0.1.2%7Cjar)
 
 ## Prerequisites:
 * Java 9 or later
@@ -9,14 +9,14 @@ JMLab Java 9 Utility Libraries
 ## Usage
 Gradle:
 ```groovy
-compile 'kr.jmlab:jmlab-utils-java9:0.1.1'
+compile 'kr.jmlab:jmlab-utils-java9:0.1.2'
 ```
 Maven:
 ```xml
 <dependency>
     <groupId>kr.jmlab</groupId>
     <artifactId>jmlab-utils-java9</artifactId>
-    <version>0.1.1</version>
+    <version>0.1.2</version>
 </dependency>
 ```
 
@@ -25,7 +25,7 @@ Checkout the source code:
 
     git clone https://github.com/JM-Lab/utils-java9.git
     cd utils-java9
-    git checkout -b 0.1.1 origin/0.1.1
+    git checkout -b 0.1.2 origin/0.1.2
     mvn install
 
 ## Useful Utilities With New Features Of Java 9  :

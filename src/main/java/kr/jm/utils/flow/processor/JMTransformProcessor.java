@@ -29,7 +29,7 @@ public class JMTransformProcessor<T, R> implements
     /**
      * Instantiates a new Jm transform processor.
      *
-     * @param transformerFunction the transformer interface
+     * @param transformerFunction the transformer function
      */
     public JMTransformProcessor(
             Function<T, R> transformerFunction) {
@@ -41,7 +41,7 @@ public class JMTransformProcessor<T, R> implements
      *
      * @param <I>                 the type parameter
      * @param <O>                 the type parameter
-     * @param transformerFunction the transformer interface
+     * @param transformerFunction the transformer function
      * @return the single input publisher bi consumer
      */
     protected static <I, O> BiConsumer<I, JMSubmissionPublisher<? super O>>

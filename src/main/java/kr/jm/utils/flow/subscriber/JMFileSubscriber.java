@@ -8,28 +8,40 @@ import java.nio.file.Path;
 import java.util.function.Function;
 
 /**
- * The type File output.
+ * The type Jm file subscriber.
+ *
+ * @param <I> the type parameter
  */
-
 public class JMFileSubscriber<I> extends JMSubscriber<I> implements
         AutoCloseable {
 
     private JMFileAppender fileAppender;
 
+    /**
+     * Instantiates a new Jm file subscriber.
+     *
+     * @param filePath the file path
+     */
     public JMFileSubscriber(String filePath) {
         this(filePath, false);
     }
 
+    /**
+     * Instantiates a new Jm file subscriber.
+     *
+     * @param filePath         the file path
+     * @param enableJsonString the enable json string
+     */
     public JMFileSubscriber(String filePath, boolean enableJsonString) {
         this(filePath,
                 enableJsonString ? JMJson::toJsonString : Object::toString);
     }
 
     /**
-     * Instantiates a new File output.
+     * Instantiates a new Jm file subscriber.
      *
      * @param filePath         the file path
-     * @param toStringFunction
+     * @param toStringFunction the to string function
      */
     public JMFileSubscriber(String filePath,
             Function<Object, String> toStringFunction) {

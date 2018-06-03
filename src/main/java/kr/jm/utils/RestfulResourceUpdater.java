@@ -15,9 +15,9 @@ import static kr.jm.utils.helper.JMPredicate.getEquals;
 import static kr.jm.utils.helper.JMPredicate.peek;
 
 /**
- * The typeReference Restful resource updater.
+ * The type Restful resource updater.
  *
- * @param <T> the typeReference parameter
+ * @param <T> the type parameter
  */
 public class RestfulResourceUpdater<T> {
     private static final Logger log = org.slf4j.LoggerFactory
@@ -36,16 +36,37 @@ public class RestfulResourceUpdater<T> {
         this(restfulResourceUrl, 0);
     }
 
+    /**
+     * Instantiates a new Restful resource updater.
+     *
+     * @param restfulResourceUrl the restful resource url
+     * @param periodSeconds      the period seconds
+     */
     public RestfulResourceUpdater(String restfulResourceUrl,
             int periodSeconds) {
         this(restfulResourceUrl, periodSeconds, 0);
     }
 
+    /**
+     * Instantiates a new Restful resource updater.
+     *
+     * @param restfulResourceUrl the restful resource url
+     * @param periodSeconds      the period seconds
+     * @param initialDelayMillis the initial delay millis
+     */
     public RestfulResourceUpdater(String restfulResourceUrl, int periodSeconds,
             long initialDelayMillis) {
         this(restfulResourceUrl, periodSeconds, initialDelayMillis, null);
     }
 
+    /**
+     * Instantiates a new Restful resource updater.
+     *
+     * @param restfulResourceUrl the restful resource url
+     * @param periodSeconds      the period seconds
+     * @param initialDelayMillis the initial delay millis
+     * @param updateConsumer     the update consumer
+     */
     public RestfulResourceUpdater(String restfulResourceUrl, int periodSeconds,
             long initialDelayMillis, Consumer<T> updateConsumer) {
         this.restfulResourceUrl = restfulResourceUrl;
@@ -58,6 +79,11 @@ public class RestfulResourceUpdater<T> {
                                     this::updateResourceWithLog));
     }
 
+    /**
+     * Update resource with log optional.
+     *
+     * @return the optional
+     */
     public Optional<T> updateResourceWithLog() {
         Optional<T> resourceAsOpt = updateResource();
         log.debug("Updated Resource - {}",
@@ -103,9 +129,9 @@ public class RestfulResourceUpdater<T> {
     }
 
     /**
-     * Gets typeReference.
+     * Gets type reference.
      *
-     * @return the typeReference
+     * @return the type reference
      */
     public TypeReference<T> getTypeReference() {
         return typeReference;

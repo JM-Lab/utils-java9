@@ -14,11 +14,11 @@ import java.util.function.Function;
 public interface JMTransformProcessorInterface<T, R> extends
         Flow.Processor<T, R>, JMPublisherInterface<R> {
     /**
-     * Subscribe and return s.
+     * Subscribe and return processor s.
      *
      * @param <O>                      the type parameter
      * @param <S>                      the type parameter
-     * @param returnTransformProcessor the return single transform processor
+     * @param returnTransformProcessor the return transform processor
      * @return the s
      */
     default <O, S extends JMTransformProcessorInterface<R, O>> S subscribeAndReturnProcessor(

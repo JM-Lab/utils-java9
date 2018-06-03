@@ -23,6 +23,9 @@ public class JMSubscriber<T> implements Flow.Subscriber<T> {
     private Flow.Subscription subscription;
     private Consumer<T> dataConsumer;
 
+    /**
+     * Instantiates a new Jm subscriber.
+     */
     protected JMSubscriber() {
         this.dataConsumer =
                 d -> JMExceptionManager.logException(log,
@@ -34,7 +37,7 @@ public class JMSubscriber<T> implements Flow.Subscriber<T> {
     /**
      * Instantiates a new Jm subscriber.
      *
-     * @param dataConsumer the item consumer
+     * @param dataConsumer the data consumer
      */
     public JMSubscriber(Consumer<T> dataConsumer) {
         setDataConsumer(dataConsumer);
@@ -67,6 +70,11 @@ public class JMSubscriber<T> implements Flow.Subscriber<T> {
         JMLog.info(log, "onComplete");
     }
 
+    /**
+     * Sets data consumer.
+     *
+     * @param dataConsumer the data consumer
+     */
     public void setDataConsumer(Consumer<T> dataConsumer) {
         this.dataConsumer = dataConsumer;
     }

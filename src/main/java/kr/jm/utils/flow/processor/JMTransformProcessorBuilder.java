@@ -30,7 +30,7 @@ public class JMTransformProcessorBuilder {
      * @param <O>                     the type parameter
      * @param <I>                     the type parameter
      * @param <R>                     the type parameter
-     * @param eachTransformerFunction the each transformer
+     * @param eachTransformerFunction the each transformer function
      * @return the jm transform processor interface
      */
     public static <O, I extends Collection<O>, R> JMTransformProcessorInterface<I, R> buildCollectionEach(
@@ -87,7 +87,7 @@ public class JMTransformProcessorBuilder {
      * @param <O>                     the type parameter
      * @param <I>                     the type parameter
      * @param <R>                     the type parameter
-     * @param eachTransformerFunction the each transformer
+     * @param eachTransformerFunction the each transformer function
      * @return the jm concurrent transform processor
      */
     public static <O, I extends Collection<O>, R>
@@ -104,7 +104,7 @@ public class JMTransformProcessorBuilder {
      * @param <I>                     the type parameter
      * @param <R>                     the type parameter
      * @param maxBufferCapacity       the max buffer capacity
-     * @param eachTransformerFunction the each transformer
+     * @param eachTransformerFunction the each transformer function
      * @return the jm concurrent transform processor
      */
     public static <O, I extends Collection<O>, R>
@@ -122,7 +122,7 @@ public class JMTransformProcessorBuilder {
      * @param <R>                     the type parameter
      * @param executor                the executor
      * @param maxBufferCapacity       the max buffer capacity
-     * @param eachTransformerFunction the each transformer
+     * @param eachTransformerFunction the each transformer function
      * @return the jm concurrent transform processor
      */
     public static <O, I extends Collection<O>, R>
@@ -136,7 +136,7 @@ public class JMTransformProcessorBuilder {
     }
 
     /**
-     * Build jm transform processor interface.
+     * Build bi jm transform processor interface.
      *
      * @param <I>                       the type parameter
      * @param <O>                       the type parameter
@@ -153,7 +153,7 @@ public class JMTransformProcessorBuilder {
      *
      * @param <I>                 the type parameter
      * @param <O>                 the type parameter
-     * @param transformerFunction the transformer
+     * @param transformerFunction the transformer function
      * @return the jm transform processor
      */
     public static <I, O> JMTransformProcessor<I, O> build(
@@ -213,7 +213,7 @@ public class JMTransformProcessorBuilder {
      *
      * @param <I>                 the type parameter
      * @param <O>                 the type parameter
-     * @param transformerFunction the transformer
+     * @param transformerFunction the transformer function
      * @return the jm concurrent transform processor
      */
     public static <I, O> JMConcurrentTransformProcessor<I, O> buildWithThreadPool(
@@ -228,7 +228,7 @@ public class JMTransformProcessorBuilder {
      * @param <I>                 the type parameter
      * @param <O>                 the type parameter
      * @param maxBufferCapacity   the max buffer capacity
-     * @param transformerFunction the transformer
+     * @param transformerFunction the transformer function
      * @return the jm concurrent transform processor
      */
     public static <I, O> JMConcurrentTransformProcessor<I, O> buildWithThreadPool(
@@ -245,7 +245,7 @@ public class JMTransformProcessorBuilder {
      * @param <O>                 the type parameter
      * @param executor            the executor
      * @param maxBufferCapacity   the max buffer capacity
-     * @param transformerFunction the transformer
+     * @param transformerFunction the transformer function
      * @return the jm concurrent transform processor
      */
     public static <I, O> JMConcurrentTransformProcessor<I, O> buildWithThreadPool(
@@ -261,8 +261,8 @@ public class JMTransformProcessorBuilder {
      * @param <T>                  the type parameter
      * @param <M>                  the type parameter
      * @param <R>                  the type parameter
-     * @param transformerFunction1 the transformer 1
-     * @param transformerFunction2 the transformer 2
+     * @param transformerFunction1 the transformer function 1
+     * @param transformerFunction2 the transformer function 2
      * @return the jm transform processor interface
      */
     public static <T, M, R> JMTransformProcessorInterface<T, R> buildCombine(

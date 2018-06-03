@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 public interface JMPublisherInterface<T> extends Flow.Publisher<T> {
 
     /**
-     * Subscribe and return r.
+     * Subscribe and return subcriber r.
      *
      * @param <R>              the type parameter
      * @param returnSubscriber the return subscriber
@@ -28,6 +28,12 @@ public interface JMPublisherInterface<T> extends Flow.Publisher<T> {
         return returnSubscriber;
     }
 
+    /**
+     * Consume and return subscriber flow . subscriber.
+     *
+     * @param consumer the consumer
+     * @return the flow . subscriber
+     */
     default Flow.Subscriber<T> consumeAndReturnSubscriber(
             Consumer<T> consumer) {
         return subscribeAndReturnSubcriber(JMSubscriberBuilder.build(consumer));
@@ -49,7 +55,7 @@ public interface JMPublisherInterface<T> extends Flow.Publisher<T> {
     /**
      * Consume with jm publisher interface.
      *
-     * @param consumers the item consumers
+     * @param consumers the consumers
      * @return the jm publisher interface
      */
     default JMPublisherInterface<T> consumeWith(Consumer<T>... consumers) {
