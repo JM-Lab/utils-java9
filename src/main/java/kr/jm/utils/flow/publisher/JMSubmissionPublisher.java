@@ -1,5 +1,6 @@
 package kr.jm.utils.flow.publisher;
 
+import kr.jm.utils.exception.JMExceptionManager;
 import kr.jm.utils.helper.JMLog;
 import org.slf4j.Logger;
 
@@ -55,8 +56,13 @@ public class JMSubmissionPublisher<T> implements
         JMLog.debug(log, "submit", item);
         if (Objects.isNull(item))
             return 0;
-        singleSubscription.next(item);
-        return 1;
+        try {
+            singleSubscription.next(item);
+            return 1;
+        } catch (Exception e) {
+            return JMExceptionManager
+                    .handleExceptionAndReturn(log, e, "submit", () -> 0, item);
+        }
     }
 
     private class SingleSubscription implements Flow.Subscription {
@@ -75,14 +81,10 @@ public class JMSubmissionPublisher<T> implements
 
         @Override
         public void request(long n) {
-            if (isNotCanceledOrNonNullSubscriber())
+            if (!isCanceled())
                 for (int i = 0; i < n; i++)
                     Optional.ofNullable(inputSupplier.get())
                             .ifPresent(this::next);
-        }
-
-        private boolean isNotCanceledOrNonNullSubscriber() {
-            return !isCanceled() || nonNullSubscriber();
         }
 
         private boolean isCanceled() {
@@ -99,26 +101,10 @@ public class JMSubmissionPublisher<T> implements
         }
 
         private void next(T data) {
-            if (isNotCanceledOrNonNullSubscriber() && nonNullData(data))
-                for (Flow.Subscriber<? super T> subscriber : subscriberList)
-                    subscriber.onNext(data);
+            for (Flow.Subscriber<? super T> subscriber : subscriberList)
+                subscriber.onNext(data);
         }
 
-        private boolean nonNullData(T data) {
-            return nonNullWithWarnLog("data", data);
-        }
-
-        private boolean nonNullSubscriber() {
-            return nonNullWithWarnLog("subscriberList", subscriberList);
-        }
-
-        private boolean nonNullWithWarnLog(String targetName, Object
-                target) {
-            if (Objects.nonNull(target))
-                return true;
-            log.warn("{} = null", targetName);
-            return false;
-        }
     }
 
 

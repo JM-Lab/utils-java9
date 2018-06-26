@@ -88,7 +88,7 @@ public class JMTransformProcessor<T, R> implements
 
     @Override
     public void subscribe(Flow.Subscriber<? super R> subscriber) {
-        JMLog.info(log, "subscribeWith", subscriber);
+        JMLog.info(log, "subscribe", subscriber);
         this.outputPublisher.subscribe(subscriber);
     }
 }

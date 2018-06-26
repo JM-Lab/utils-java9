@@ -23,7 +23,7 @@ public class WaitingSubmissionPublisherTest {
     @Before
     public void setUp() {
         this.waitingSubmissionPublisher =
-                new WaitingSubmissionPublisher<>(100);
+                new WaitingSubmissionPublisher<>(1);
     }
 
     @After

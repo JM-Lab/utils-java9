@@ -1,8 +1,10 @@
 package kr.jm.utils.flow.publisher;
 
+import kr.jm.utils.exception.JMExceptionManager;
 import kr.jm.utils.helper.JMLog;
 import org.slf4j.Logger;
 
+import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Flow;
 import java.util.concurrent.SubmissionPublisher;
@@ -52,9 +54,16 @@ public class SubmissionPublisherImplementsJM<T> extends
     }
 
     @Override
-    public int submit(T data) {
-        JMLog.debug(log, "submit", data);
-        return super.submit(data);
+    public int submit(T item) {
+        JMLog.debug(log, "submit", item);
+        if (Objects.isNull(item) || isClosed())
+            return 0;
+        try {
+            return super.submit(item);
+        } catch (Exception e) {
+            return JMExceptionManager
+                    .handleExceptionAndReturn(log, e, "submit", () -> 0, item);
+        }
     }
 
     @Override

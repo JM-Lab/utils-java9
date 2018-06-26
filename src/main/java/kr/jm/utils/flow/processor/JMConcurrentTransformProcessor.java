@@ -1,6 +1,7 @@
 package kr.jm.utils.flow.processor;
 
 import kr.jm.utils.flow.publisher.JMSubmissionPublisher;
+import kr.jm.utils.flow.publisher.SubmissionPublisherImplementsJM;
 import kr.jm.utils.flow.subscriber.JMSubscriberBuilder;
 import kr.jm.utils.helper.JMLog;
 import kr.jm.utils.helper.JMThread;
@@ -89,7 +90,7 @@ public class JMConcurrentTransformProcessor<T, R> extends
             int maxBufferCapacity,
             BiConsumer<T, JMSubmissionPublisher<? super R>> singlePublisherBiConsumer) {
         super(singlePublisherBiConsumer);
-        this.submissionPublisher = new SubmissionPublisher<>(
+        this.submissionPublisher = new SubmissionPublisherImplementsJM<>(
                 executor == null ? JMThread.getCommonPool() : executor,
                 maxBufferCapacity);
         super.subscribe(
@@ -98,7 +99,7 @@ public class JMConcurrentTransformProcessor<T, R> extends
 
     @Override
     public void subscribe(Flow.Subscriber<? super R> subscriber) {
-        JMLog.info(log, "subscribeWith", subscriber);
+        JMLog.info(log, "subscribe", subscriber);
         submissionPublisher.subscribe(subscriber);
     }
 
