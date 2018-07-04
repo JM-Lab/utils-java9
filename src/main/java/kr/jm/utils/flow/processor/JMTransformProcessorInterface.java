@@ -3,6 +3,7 @@ package kr.jm.utils.flow.processor;
 import kr.jm.utils.flow.publisher.JMPublisherInterface;
 
 import java.util.concurrent.Flow;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -51,5 +52,19 @@ public interface JMTransformProcessorInterface<T, R> extends
             Function<R, O> transformerFunction) {
         return subscribeAndReturnProcessor(JMTransformProcessorBuilder
                 .buildWithThreadPool(transformerFunction));
+    }
+
+    @Override
+    default JMTransformProcessorInterface<T, R> subscribeWith(
+            Flow.Subscriber<R>... subscribers) {
+        JMPublisherInterface.super.subscribeWith(subscribers);
+        return this;
+    }
+
+    @Override
+    default JMTransformProcessorInterface<T, R> consumeWith(
+            Consumer<R>... consumers) {
+        JMPublisherInterface.super.consumeWith(consumers);
+        return this;
     }
 }

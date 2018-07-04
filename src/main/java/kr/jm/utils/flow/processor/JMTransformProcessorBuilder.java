@@ -1,151 +1,33 @@
 package kr.jm.utils.flow.processor;
 
-import kr.jm.utils.flow.publisher.JMSubmissionPublisher;
-
 import java.util.Collection;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Flow;
-import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 /**
  * The type Jm transform processor builder.
  */
 public class JMTransformProcessorBuilder {
-    /**
-     * Build collection each jm transform processor interface.
-     *
-     * @param <O> the type parameter
-     * @param <I> the type parameter
-     * @return the jm transform processor interface
-     */
-    public static <O, I extends Collection<O>> JMTransformProcessorInterface<I, O> buildCollectionEach() {
-        return buildBi((collection, singleSubmissionPublisher) -> collection
-                .forEach(singleSubmissionPublisher::submit));
-    }
 
-    /**
-     * Build collection each jm transform processor interface.
-     *
-     * @param <O>                     the type parameter
-     * @param <I>                     the type parameter
-     * @param <R>                     the type parameter
-     * @param eachTransformerFunction the each transformer function
-     * @return the jm transform processor interface
-     */
-    public static <O, I extends Collection<O>, R> JMTransformProcessorInterface<I, R> buildCollectionEach(
-            Function<O, R> eachTransformerFunction) {
-        return buildBi(
-                (collection, singleSubmissionPublisher) -> collection.stream()
-                        .map(eachTransformerFunction::apply)
-                        .forEach(singleSubmissionPublisher::submit));
-    }
-
-    /**
-     * Build collection each with thread pool jm concurrent transform processor.
-     *
-     * @param <O> the type parameter
-     * @param <I> the type parameter
-     * @return the jm concurrent transform processor
-     */
-    public static <O, I extends Collection<O>> JMConcurrentTransformProcessor<I, O> buildCollectionEachWithThreadPool() {
-        return buildCollectionEachWithThreadPool(Flow.defaultBufferSize());
-    }
-
-    /**
-     * Build collection each with thread pool jm concurrent transform processor.
-     *
-     * @param <O>               the type parameter
-     * @param <I>               the type parameter
-     * @param maxBufferCapacity the max buffer capacity
-     * @return the jm concurrent transform processor
-     */
-    public static <O, I extends Collection<O>> JMConcurrentTransformProcessor<I, O> buildCollectionEachWithThreadPool(
-            int maxBufferCapacity) {
-        return buildCollectionEachWithThreadPool(null, maxBufferCapacity);
-    }
-
-    /**
-     * Build collection each with thread pool jm concurrent transform processor.
-     *
-     * @param <O>               the type parameter
-     * @param <I>               the type parameter
-     * @param executor          the executor
-     * @param maxBufferCapacity the max buffer capacity
-     * @return the jm concurrent transform processor
-     */
-    public static <O, I extends Collection<O>> JMConcurrentTransformProcessor<I, O> buildCollectionEachWithThreadPool(
-            Executor executor, int maxBufferCapacity) {
-        return buildWithThreadPool(executor, maxBufferCapacity,
-                (collection, singleSubmissionPublisher) -> collection
-                        .forEach(singleSubmissionPublisher::submit));
-    }
-
-    /**
-     * Build collection each with thread pool jm concurrent transform processor.
-     *
-     * @param <O>                     the type parameter
-     * @param <I>                     the type parameter
-     * @param <R>                     the type parameter
-     * @param eachTransformerFunction the each transformer function
-     * @return the jm concurrent transform processor
-     */
-    public static <O, I extends Collection<O>, R>
-    JMConcurrentTransformProcessor<I, R> buildCollectionEachWithThreadPool(
-            Function<O, R> eachTransformerFunction) {
+    public static <I, R> JMConcurrentTransformProcessor<Collection<I>, R> buildCollectionEachWithThreadPool(
+            Function<Collection<I>, R> collectionTransformFunction) {
         return buildCollectionEachWithThreadPool(Flow.defaultBufferSize(),
-                eachTransformerFunction);
+                collectionTransformFunction);
     }
 
-    /**
-     * Build collection each with thread pool jm concurrent transform processor.
-     *
-     * @param <O>                     the type parameter
-     * @param <I>                     the type parameter
-     * @param <R>                     the type parameter
-     * @param maxBufferCapacity       the max buffer capacity
-     * @param eachTransformerFunction the each transformer function
-     * @return the jm concurrent transform processor
-     */
-    public static <O, I extends Collection<O>, R>
-    JMConcurrentTransformProcessor<I, R> buildCollectionEachWithThreadPool(
-            int maxBufferCapacity, Function<O, R> eachTransformerFunction) {
+    public static <I, R> JMConcurrentTransformProcessor<Collection<I>, R> buildCollectionEachWithThreadPool(
+            int maxBufferCapacity,
+            Function<Collection<I>, R> collectionTransformFunction) {
         return buildCollectionEachWithThreadPool(null, maxBufferCapacity,
-                eachTransformerFunction);
+                collectionTransformFunction);
     }
 
-    /**
-     * Build collection each with thread pool jm concurrent transform processor.
-     *
-     * @param <O>                     the type parameter
-     * @param <I>                     the type parameter
-     * @param <R>                     the type parameter
-     * @param executor                the executor
-     * @param maxBufferCapacity       the max buffer capacity
-     * @param eachTransformerFunction the each transformer function
-     * @return the jm concurrent transform processor
-     */
-    public static <O, I extends Collection<O>, R>
-    JMConcurrentTransformProcessor<I, R> buildCollectionEachWithThreadPool(
-            Executor executor, int maxBufferCapacity,
-            Function<O, R> eachTransformerFunction) {
+    public static <I, R> JMConcurrentTransformProcessor<Collection<I>, R>
+    buildCollectionEachWithThreadPool(Executor executor, int maxBufferCapacity,
+            Function<Collection<I>, R> collectionTransformFunction) {
         return buildWithThreadPool(executor, maxBufferCapacity,
-                (collection, singleSubmissionPublisher) -> collection.stream
-                        ().map(eachTransformerFunction::apply)
-                        .forEach(singleSubmissionPublisher::submit));
-    }
-
-    /**
-     * Build bi jm transform processor interface.
-     *
-     * @param <I>                       the type parameter
-     * @param <O>                       the type parameter
-     * @param singlePublisherBiConsumer the single publisher bi consumer
-     * @return the jm transform processor interface
-     */
-    public static <I, O> JMTransformProcessorInterface<I, O> buildBi(
-            BiConsumer<I, JMSubmissionPublisher<? super O>> singlePublisherBiConsumer) {
-        return new JMTransformProcessor<>(singlePublisherBiConsumer);
+                collectionTransformFunction);
     }
 
     /**
@@ -159,53 +41,6 @@ public class JMTransformProcessorBuilder {
     public static <I, O> JMTransformProcessor<I, O> build(
             Function<I, O> transformerFunction) {
         return new JMTransformProcessor<>(transformerFunction);
-    }
-
-    /**
-     * Build with thread pool jm concurrent transform processor.
-     *
-     * @param <I>                       the type parameter
-     * @param <O>                       the type parameter
-     * @param singlePublisherBiConsumer the single publisher bi consumer
-     * @return the jm concurrent transform processor
-     */
-    public static <I, O> JMConcurrentTransformProcessor<I, O> buildWithThreadPool(
-            BiConsumer<I, JMSubmissionPublisher<? super O>> singlePublisherBiConsumer) {
-        return buildWithThreadPool(Flow.defaultBufferSize(),
-                singlePublisherBiConsumer);
-    }
-
-    /**
-     * Build with thread pool jm concurrent transform processor.
-     *
-     * @param <I>                       the type parameter
-     * @param <O>                       the type parameter
-     * @param maxBufferCapacity         the max buffer capacity
-     * @param singlePublisherBiConsumer the single publisher bi consumer
-     * @return the jm concurrent transform processor
-     */
-    public static <I, O> JMConcurrentTransformProcessor<I, O> buildWithThreadPool(
-            int maxBufferCapacity,
-            BiConsumer<I, JMSubmissionPublisher<? super O>> singlePublisherBiConsumer) {
-        return buildWithThreadPool(null, maxBufferCapacity,
-                singlePublisherBiConsumer);
-    }
-
-    /**
-     * Build with thread pool jm concurrent transform processor.
-     *
-     * @param <I>                       the type parameter
-     * @param <O>                       the type parameter
-     * @param executor                  the executor
-     * @param maxBufferCapacity         the max buffer capacity
-     * @param singlePublisherBiConsumer the single publisher bi consumer
-     * @return the jm concurrent transform processor
-     */
-    public static <I, O> JMConcurrentTransformProcessor<I, O> buildWithThreadPool(
-            Executor executor, int maxBufferCapacity,
-            BiConsumer<I, JMSubmissionPublisher<? super O>> singlePublisherBiConsumer) {
-        return new JMConcurrentTransformProcessor<>(executor,
-                maxBufferCapacity, singlePublisherBiConsumer);
     }
 
     /**

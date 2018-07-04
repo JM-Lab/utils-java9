@@ -60,8 +60,10 @@ public interface JMPublisherInterface<T> extends Flow.Publisher<T> {
      */
     default JMPublisherInterface<T> consumeWith(Consumer<T>... consumers) {
         JMOptional.getOptional(consumers).map(Arrays::stream)
-                .ifPresent(stream -> stream.map(JMSubscriberBuilder::build)
-                        .forEach(this::subscribe));
+                .map(stream -> stream.map(JMSubscriberBuilder::build))
+                .ifPresent(stream -> stream.forEach(s -> {
+                    subscribe(s);
+                }));
         return this;
     }
 }

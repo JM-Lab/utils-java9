@@ -1,13 +1,14 @@
 package kr.jm.utils.flow.processor;
 
+import kr.jm.utils.exception.JMExceptionManager;
 import kr.jm.utils.flow.publisher.JMSubmissionPublisher;
 import kr.jm.utils.flow.subscriber.JMSubscriber;
 import kr.jm.utils.flow.subscriber.JMSubscriberBuilder;
 import kr.jm.utils.helper.JMLog;
 import org.slf4j.Logger;
 
+import java.util.Optional;
 import java.util.concurrent.Flow;
-import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 /**
@@ -29,38 +30,23 @@ public class JMTransformProcessor<T, R> implements
     /**
      * Instantiates a new Jm transform processor.
      *
-     * @param transformerFunction the transformer function
+     * @param transformFunction the transformer function
      */
-    public JMTransformProcessor(
-            Function<T, R> transformerFunction) {
-        this(getSingleInputPublisherBiConsumer(transformerFunction));
-    }
-
-    /**
-     * Gets single input publisher bi consumer.
-     *
-     * @param <I>                 the type parameter
-     * @param <O>                 the type parameter
-     * @param transformerFunction the transformer function
-     * @return the single input publisher bi consumer
-     */
-    protected static <I, O> BiConsumer<I, JMSubmissionPublisher<? super O>>
-    getSingleInputPublisherBiConsumer(Function<I, O> transformerFunction) {
-        return (i, s) -> s.submit(transformerFunction.apply(i));
-    }
-
-    /**
-     * Instantiates a new Jm transform processor.
-     *
-     * @param outputPublisherBiConsumer the output publisher bi consumer
-     */
-    public JMTransformProcessor(
-            BiConsumer<T, JMSubmissionPublisher<? super R>>
-                    outputPublisherBiConsumer) {
+    public JMTransformProcessor(Function<T, R> transformFunction) {
         this.outputPublisher = new JMSubmissionPublisher<>();
-        this.inputSubscriber = JMSubscriberBuilder
-                .build(t -> outputPublisherBiConsumer
-                        .accept(t, outputPublisher));
+        this.inputSubscriber = JMSubscriberBuilder.build(t -> Optional
+                .ofNullable(verifyTransformFunction(transformFunction, t))
+                .ifPresent(outputPublisher::submit));
+    }
+
+    private <I, O> O verifyTransformFunction(Function<I, O> transformFunction,
+            I i) {
+        try {
+            return transformFunction.apply(i);
+        } catch (Exception e) {
+            return JMExceptionManager.handleExceptionAndReturnNull(log, e,
+                    "verifyTransformFunction", i);
+        }
     }
 
     @Override

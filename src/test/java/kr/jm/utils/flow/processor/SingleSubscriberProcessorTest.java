@@ -12,7 +12,6 @@ import org.junit.Test;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
 
 public class SingleSubscriberProcessorTest {
 
@@ -24,12 +23,10 @@ public class SingleSubscriberProcessorTest {
     @Before
     public void setUp() {
         this.singleTransformProcessor =
-                new JMTransformProcessor<>(
-                        (Function<String, List<String>>)
-                                JMWordSplitter::splitAsList);
+                new JMTransformProcessor<>(JMWordSplitter::splitAsList);
         this.singleTransformWithThreadPoolProcessor =
                 new JMConcurrentTransformProcessor<>(3,
-                        (Function<String, List<String>>) JMWordSplitter::splitAsList);
+                        JMWordSplitter::splitAsList);
     }
 
     @After
