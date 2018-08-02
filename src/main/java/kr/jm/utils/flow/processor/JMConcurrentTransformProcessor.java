@@ -2,6 +2,7 @@ package kr.jm.utils.flow.processor;
 
 import kr.jm.utils.flow.publisher.SubmissionPublisherImplementsJM;
 import kr.jm.utils.flow.subscriber.JMSubscriberBuilder;
+import kr.jm.utils.helper.JMLog;
 import kr.jm.utils.helper.JMThread;
 
 import java.util.concurrent.Executor;
@@ -65,6 +66,7 @@ public class JMConcurrentTransformProcessor<T, R> extends
 
     @Override
     public void close() {
+        JMLog.info(log, "close");
         submissionPublisher.close();
     }
 }

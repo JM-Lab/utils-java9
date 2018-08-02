@@ -3,6 +3,9 @@ package kr.jm.utils.flow.publisher;
 import kr.jm.utils.enums.OS;
 import kr.jm.utils.helper.JMThread;
 
+import java.util.concurrent.Flow;
+import java.util.function.Consumer;
+
 
 public class WaitingSubmissionPublisher<T> extends
         SubmissionPublisherImplementsJM<T> {
@@ -35,5 +38,18 @@ public class WaitingSubmissionPublisher<T> extends
 
     public int getMaxQueue() {
         return maxQueue;
+    }
+
+    @Override
+    public WaitingSubmissionPublisher<T> subscribeWith(
+            Flow.Subscriber<T>... subscribers) {
+        super.subscribeWith(subscribers);
+        return this;
+    }
+
+    @Override
+    public WaitingSubmissionPublisher<T> consumeWith(Consumer<T>... consumers) {
+        super.consumeWith(consumers);
+        return this;
     }
 }

@@ -5,6 +5,7 @@ import kr.jm.utils.flow.subscriber.JMSubscriberBuilder;
 import kr.jm.utils.helper.JMLambda;
 import kr.jm.utils.helper.JMResources;
 import kr.jm.utils.helper.JMThread;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,6 +29,12 @@ public class BulkSubmissionPublisherTest {
         this.bulkSubmissionPublisher =
                 new WaitingBulkSubmissionPublisher<>(
                         stringWaitingSubmissionPublisher, 10);
+    }
+
+    @After
+    public void tearDown() {
+        this.stringWaitingSubmissionPublisher.close();
+        this.bulkSubmissionPublisher.close();
     }
 
     @Test

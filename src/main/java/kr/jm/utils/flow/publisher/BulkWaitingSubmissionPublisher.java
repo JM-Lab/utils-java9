@@ -1,6 +1,7 @@
 package kr.jm.utils.flow.publisher;
 
 import kr.jm.utils.flow.subscriber.JMSubscriberBuilder;
+import kr.jm.utils.helper.JMLog;
 
 import java.util.List;
 
@@ -33,27 +34,33 @@ public class BulkWaitingSubmissionPublisher<T> extends
     public BulkWaitingSubmissionPublisher(BulkSubmissionPublisher<T>
             bulkSubmissionPublisher, long waitingMillis, int queueSizeLimit) {
         super(waitingMillis, queueSizeLimit);
-        bulkSubmissionPublisher
-                .subscribe(JMSubscriberBuilder.build(super::submit));
-        this.bulkSubmissionPublisher = bulkSubmissionPublisher;
+        this.bulkSubmissionPublisher = bulkSubmissionPublisher
+                .subscribeWith(JMSubscriberBuilder.build(super::submit));
     }
 
     public int submit(T[] dataArray) {
-        return bulkSubmissionPublisher.submit(dataArray);
+        return this.bulkSubmissionPublisher.submit(dataArray);
     }
 
     @Override
     public int submit(List<T> itemList) {
-        return bulkSubmissionPublisher.submit(itemList);
+        return this.bulkSubmissionPublisher.submit(itemList);
     }
 
     public void submitSingle(T item) {
-        bulkSubmissionPublisher.submitSingle(item);
+        this.bulkSubmissionPublisher.submitSingle(item);
     }
 
     public BulkSubmissionPublisher<T> getBulkSubmissionPublisher() {
-        return bulkSubmissionPublisher;
+        return this.bulkSubmissionPublisher;
     }
 
-    public void flush() {bulkSubmissionPublisher.flush();}
+    public void flush() {this.bulkSubmissionPublisher.flush();}
+
+    @Override
+    public void close() {
+        JMLog.info(log, "close");
+        this.bulkSubmissionPublisher.close();
+        super.close();
+    }
 }

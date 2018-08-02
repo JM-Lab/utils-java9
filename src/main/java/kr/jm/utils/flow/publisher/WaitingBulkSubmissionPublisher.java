@@ -1,6 +1,7 @@
 package kr.jm.utils.flow.publisher;
 
 import kr.jm.utils.flow.subscriber.JMSubscriberBuilder;
+import kr.jm.utils.helper.JMLog;
 
 /**
  * The type Waiting bulk submission publisher.
@@ -9,6 +10,8 @@ import kr.jm.utils.flow.subscriber.JMSubscriberBuilder;
  */
 public class WaitingBulkSubmissionPublisher<T> extends
         BulkSubmissionPublisher<T> {
+
+    private WaitingSubmissionPublisher<T> waitingSubmissionPublisher;
 
     /**
      * Instantiates a new Waiting bulk submission publisher.
@@ -44,8 +47,14 @@ public class WaitingBulkSubmissionPublisher<T> extends
             WaitingSubmissionPublisher<T> waitingSubmissionPublisher,
             int bulkSize, int flushIntervalSeconds) {
         super(bulkSize, flushIntervalSeconds);
-        waitingSubmissionPublisher
-                .subscribe(JMSubscriberBuilder.build(this::submitSingle));
+        this.waitingSubmissionPublisher = waitingSubmissionPublisher
+                .subscribeWith(JMSubscriberBuilder.build(this::submitSingle));
     }
 
+    @Override
+    public void close() {
+        JMLog.info(log, "close");
+        this.waitingSubmissionPublisher.close();
+        super.close();
+    }
 }

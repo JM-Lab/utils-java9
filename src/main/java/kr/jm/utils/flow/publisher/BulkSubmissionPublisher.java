@@ -5,6 +5,9 @@ import kr.jm.utils.helper.JMOptional;
 import kr.jm.utils.helper.JMThread;
 
 import java.util.*;
+import java.util.concurrent.Flow;
+import java.util.concurrent.ScheduledFuture;
+import java.util.function.Consumer;
 
 /**
  * The type Bulk submission publisher.
@@ -12,7 +15,8 @@ import java.util.*;
  * @param <T> the type parameter
  */
 @SuppressWarnings("SynchronizeOnNonFinalField")
-public class BulkSubmissionPublisher<T> extends JMListSubmissionPublisher<T> {
+public class BulkSubmissionPublisher<T> extends JMListSubmissionPublisher<T>
+        implements AutoCloseable {
 
     /**
      * The constant DEFAULT_BULK_SIZE.
@@ -38,6 +42,8 @@ public class BulkSubmissionPublisher<T> extends JMListSubmissionPublisher<T> {
      * The Last data timestamp.
      */
     protected long lastDataTimestamp;
+
+    private ScheduledFuture<?> scheduledFuture;
 
     /**
      * Instantiates a new Bulk submission publisher.
@@ -68,8 +74,10 @@ public class BulkSubmissionPublisher<T> extends JMListSubmissionPublisher<T> {
         this.flushIntervalMillis = flushIntervalSeconds * 1000;
         this.dataList = new ArrayList<>();
         this.lastDataTimestamp = Long.MAX_VALUE;
-        JMThread.runWithScheduleAtFixedRate(flushIntervalMillis,
-                flushIntervalMillis, this::checkIntervalAndFlush);
+
+        this.scheduledFuture =
+                JMThread.runWithScheduleAtFixedRate(flushIntervalMillis,
+                        flushIntervalMillis, this::checkIntervalAndFlush);
     }
 
     private void checkIntervalAndFlush() {
@@ -144,4 +152,23 @@ public class BulkSubmissionPublisher<T> extends JMListSubmissionPublisher<T> {
         }
     }
 
+    @Override
+    public void close() {
+        JMLog.info(log, "close");
+        scheduledFuture.cancel(false);
+    }
+
+    @Override
+    public BulkSubmissionPublisher<T> subscribeWith(
+            Flow.Subscriber<List<T>>... subscribers) {
+        super.subscribeWith(subscribers);
+        return this;
+    }
+
+    @Override
+    public BulkSubmissionPublisher<T> consumeWith(
+            Consumer<List<T>>... consumers) {
+        super.consumeWith(consumers);
+        return this;
+    }
 }
