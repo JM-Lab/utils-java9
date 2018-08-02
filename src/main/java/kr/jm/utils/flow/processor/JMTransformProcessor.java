@@ -30,7 +30,7 @@ public class JMTransformProcessor<T, R> implements
     /**
      * Instantiates a new Jm transform processor.
      *
-     * @param transformFunction the transformer function
+     * @param transformFunction the transform function
      */
     public JMTransformProcessor(Function<T, R> transformFunction) {
         this.outputPublisher = new JMSubmissionPublisher<>();

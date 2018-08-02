@@ -10,12 +10,29 @@ import java.util.function.Function;
  */
 public class JMTransformProcessorBuilder {
 
+    /**
+     * Build collection each with thread pool jm concurrent transform processor.
+     *
+     * @param <I>                         the type parameter
+     * @param <R>                         the type parameter
+     * @param collectionTransformFunction the collection transform function
+     * @return the jm concurrent transform processor
+     */
     public static <I, R> JMConcurrentTransformProcessor<Collection<I>, R> buildCollectionEachWithThreadPool(
             Function<Collection<I>, R> collectionTransformFunction) {
         return buildCollectionEachWithThreadPool(Flow.defaultBufferSize(),
                 collectionTransformFunction);
     }
 
+    /**
+     * Build collection each with thread pool jm concurrent transform processor.
+     *
+     * @param <I>                         the type parameter
+     * @param <R>                         the type parameter
+     * @param maxBufferCapacity           the max buffer capacity
+     * @param collectionTransformFunction the collection transform function
+     * @return the jm concurrent transform processor
+     */
     public static <I, R> JMConcurrentTransformProcessor<Collection<I>, R> buildCollectionEachWithThreadPool(
             int maxBufferCapacity,
             Function<Collection<I>, R> collectionTransformFunction) {
@@ -23,6 +40,16 @@ public class JMTransformProcessorBuilder {
                 collectionTransformFunction);
     }
 
+    /**
+     * Build collection each with thread pool jm concurrent transform processor.
+     *
+     * @param <I>                         the type parameter
+     * @param <R>                         the type parameter
+     * @param executor                    the executor
+     * @param maxBufferCapacity           the max buffer capacity
+     * @param collectionTransformFunction the collection transform function
+     * @return the jm concurrent transform processor
+     */
     public static <I, R> JMConcurrentTransformProcessor<Collection<I>, R>
     buildCollectionEachWithThreadPool(Executor executor, int maxBufferCapacity,
             Function<Collection<I>, R> collectionTransformFunction) {
