@@ -82,7 +82,8 @@ public class BulkSubmissionPublisher<T> extends JMListSubmissionPublisher<T>
 
     private void checkIntervalAndFlush() {
         if (this.lastDataTimestamp <
-                System.currentTimeMillis() - this.flushIntervalMillis) {
+                System.currentTimeMillis() - this.flushIntervalMillis &&
+                this.dataList.size() > 0) {
             JMLog.warn(log, "checkIntervalAndFlush", this
                     .lastDataTimestamp, this.flushIntervalMillis);
             flush();

@@ -79,5 +79,6 @@ public class BulkSubmissionPublisherTest {
         System.out.println(count);
         Assert.assertEquals(103, atomicInteger.longValue());
         Assert.assertEquals(1030, count.longValue());
+        JMThread.sleep(10000);
     }
 }
