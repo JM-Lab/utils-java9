@@ -1,18 +1,20 @@
 package kr.jm.utils.flow.processor;
 
 import kr.jm.utils.JMWordSplitter;
-import kr.jm.utils.flow.publisher.StringListSubmissionPublisher;
+import kr.jm.utils.flow.publisher.ResourceSubmissionPublisher;
 import kr.jm.utils.flow.subscriber.JMSubscriberBuilder;
 import kr.jm.utils.helper.JMResources;
 import kr.jm.utils.helper.JMString;
+import kr.jm.utils.helper.JMThread;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class JMTransformProcessorBuilderTest {
+public class JMProcessorBuilderTest {
 
     static {
         System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "debug");
@@ -27,27 +29,35 @@ public class JMTransformProcessorBuilderTest {
 
     @Test
     public void test() {
-        StringListSubmissionPublisher listSubmissionPublisher = new
-                StringListSubmissionPublisher();
-        JMTransformProcessorInterface<List<String>, String>
+        ResourceSubmissionPublisher listSubmissionPublisher = new
+                ResourceSubmissionPublisher();
+        JMProcessorInterface<List<String>, String>
                 listStringJMTransformProcessor =
                 listSubmissionPublisher.subscribeAndReturnSubcriber(
-                        JMTransformProcessorBuilder.build(lineList -> JMString
+                        JMProcessorBuilder.build(lineList -> JMString
                                 .joiningWith(lineList.stream(),
                                         JMString.LINE_SEPARATOR)));
         listStringJMTransformProcessor.subscribeAndReturnSubcriber(
                 JMSubscriberBuilder.getSOPLSubscriber());
-        JMTransformProcessorInterface<List<String>, List<List<String>>>
+        JMProcessorInterface<List<String>, List<List<String>>>
                 listStringJMTransformProcessor2 =
                 listSubmissionPublisher.subscribeAndReturnSubcriber(
-                        JMTransformProcessorBuilder.build(lineList ->
-                                lineList.stream().map(line -> Arrays
-                                        .asList(JMWordSplitter.split(line)))
+                        JMProcessorBuilder.build(lineList ->
+                                lineList.stream()
+                                        .map(JMWordSplitter::splitAsList)
                                         .collect(Collectors.toList())));
-        listStringJMTransformProcessor2.subscribeAndReturnSubcriber(
-                JMSubscriberBuilder.getSOPLSubscriber());
+        List<Integer> wordCountList = new ArrayList<>();
+        listStringJMTransformProcessor2.subscribeWith(JMSubscriberBuilder
+                .build(lists -> lists.stream().map(List::size).forEach(
+                        wordCountList::add)))
+                .subscribe(JMSubscriberBuilder.getSOPLSubscriber());
         listSubmissionPublisher.submit(lineList);
-    }
+        JMThread.sleep(1000);
 
+        Assert.assertEquals(lineList.size(), wordCountList.size());
+        Assert.assertEquals(34267,
+                wordCountList.stream().mapToInt(Integer::intValue).sum());
+
+    }
 
 }

@@ -17,8 +17,8 @@ import java.util.function.Function;
  * @param <T> the type parameter
  * @param <R> the type parameter
  */
-public class JMTransformProcessor<T, R> implements
-        JMTransformProcessorInterface<T, R> {
+public class JMProcessor<T, R> implements
+        JMProcessorInterface<T, R> {
     /**
      * The Log.
      */
@@ -32,7 +32,7 @@ public class JMTransformProcessor<T, R> implements
      *
      * @param transformFunction the transform function
      */
-    public JMTransformProcessor(Function<T, R> transformFunction) {
+    public JMProcessor(Function<T, R> transformFunction) {
         this.outputPublisher = new JMSubmissionPublisher<>();
         this.inputSubscriber = JMSubscriberBuilder.build(t -> Optional
                 .ofNullable(verifyTransformFunction(transformFunction, t))

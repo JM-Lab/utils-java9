@@ -12,7 +12,7 @@ import java.util.function.Function;
  * @param <T> the type parameter
  * @param <R> the type parameter
  */
-public interface JMTransformProcessorInterface<T, R> extends
+public interface JMProcessorInterface<T, R> extends
         Flow.Processor<T, R>, JMPublisherInterface<R> {
     /**
      * Subscribe and return processor s.
@@ -22,7 +22,7 @@ public interface JMTransformProcessorInterface<T, R> extends
      * @param returnTransformProcessor the return transform processor
      * @return the s
      */
-    default <O, S extends JMTransformProcessorInterface<R, O>> S subscribeAndReturnProcessor(
+    default <O, S extends JMProcessorInterface<R, O>> S subscribeAndReturnProcessor(
             S returnTransformProcessor) {
         subscribe(returnTransformProcessor);
         return returnTransformProcessor;
@@ -35,10 +35,10 @@ public interface JMTransformProcessorInterface<T, R> extends
      * @param transformerFunction the transformer function
      * @return the jm transform processor interface
      */
-    default <O> JMTransformProcessorInterface<R, O> subscribeAndReturnProcessor(
+    default <O> JMProcessorInterface<R, O> subscribeAndReturnProcessor(
             Function<R, O> transformerFunction) {
         return subscribeAndReturnProcessor(
-                JMTransformProcessorBuilder.build(transformerFunction));
+                JMProcessorBuilder.build(transformerFunction));
     }
 
     /**
@@ -48,21 +48,21 @@ public interface JMTransformProcessorInterface<T, R> extends
      * @param transformerFunction the transformer function
      * @return the jm transform processor interface
      */
-    default <O> JMTransformProcessorInterface<R, O> subscribeAndReturnProcessorWithThreadPool(
+    default <O> JMProcessorInterface<R, O> subscribeAndReturnProcessorWithThreadPool(
             Function<R, O> transformerFunction) {
-        return subscribeAndReturnProcessor(JMTransformProcessorBuilder
-                .buildWithThreadPool(transformerFunction));
+        return subscribeAndReturnProcessor(
+                JMProcessorBuilder.build(transformerFunction));
     }
 
     @Override
-    default JMTransformProcessorInterface<T, R> subscribeWith(
+    default JMProcessorInterface<T, R> subscribeWith(
             Flow.Subscriber<R>... subscribers) {
         JMPublisherInterface.super.subscribeWith(subscribers);
         return this;
     }
 
     @Override
-    default JMTransformProcessorInterface<T, R> consumeWith(
+    default JMProcessorInterface<T, R> consumeWith(
             Consumer<R>... consumers) {
         JMPublisherInterface.super.consumeWith(consumers);
         return this;
