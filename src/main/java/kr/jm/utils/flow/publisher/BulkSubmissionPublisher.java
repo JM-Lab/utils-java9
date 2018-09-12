@@ -3,29 +3,31 @@ package kr.jm.utils.flow.publisher;
 import kr.jm.utils.helper.JMLog;
 import kr.jm.utils.helper.JMOptional;
 import kr.jm.utils.helper.JMThread;
+import org.slf4j.Logger;
 
 import java.util.*;
 import java.util.concurrent.Flow;
 import java.util.concurrent.ScheduledFuture;
-import java.util.function.Consumer;
+import java.util.concurrent.SubmissionPublisher;
 
 /**
  * The type Bulk submission publisher.
  *
  * @param <T> the type parameter
  */
-@SuppressWarnings("SynchronizeOnNonFinalField")
-public class BulkSubmissionPublisher<T> extends JMListSubmissionPublisher<T>
-        implements AutoCloseable {
-
+public class BulkSubmissionPublisher<T> implements
+        JMPublisherInterface<List<T>>, AutoCloseable {
+    protected final Logger log = org.slf4j.LoggerFactory.getLogger(getClass());
     /**
      * The constant DEFAULT_BULK_SIZE.
      */
-    public static final int DEFAULT_BULK_SIZE = 100;
+    public static final int DEFAULT_BULK_SIZE = 256;
     /**
-     * The constant DEFAULT_FLUSH_INTERVAL_SECONDS.
+     * The constant DEFAULT_FLUSH_INTERVAL_Millis.
      */
-    public static final int DEFAULT_FLUSH_INTERVAL_SECONDS = 1;
+    public static final int DEFAULT_FLUSH_INTERVAL_Millis = 100;
+
+    private SubmissionPublisher<List<T>> listSubmissionPublisher;
     /**
      * The Bulk size.
      */
@@ -58,26 +60,31 @@ public class BulkSubmissionPublisher<T> extends JMListSubmissionPublisher<T>
      * @param bulkSize the bulk size
      */
     public BulkSubmissionPublisher(int bulkSize) {
-        this(bulkSize, DEFAULT_FLUSH_INTERVAL_SECONDS);
+        this(bulkSize, DEFAULT_FLUSH_INTERVAL_Millis);
     }
 
 
     /**
      * Instantiates a new Bulk submission publisher.
      *
-     * @param bulkSize             the bulk size
-     * @param flushIntervalSeconds the flush interval seconds
+     * @param bulkSize            the bulk size
+     * @param flushIntervalMillis the flush interval seconds
      */
+    public BulkSubmissionPublisher(int bulkSize, int flushIntervalMillis) {
+        this(new JMSubmissionPublisher<>(), bulkSize, flushIntervalMillis);
+    }
+
     public BulkSubmissionPublisher(
-            int bulkSize, int flushIntervalSeconds) {
+            SubmissionPublisher<List<T>> listSubmissionPublisher, int bulkSize,
+            long flushIntervalMillis) {
+        this.listSubmissionPublisher = listSubmissionPublisher;
         this.bulkSize = bulkSize;
-        this.flushIntervalMillis = flushIntervalSeconds * 1000;
+        this.flushIntervalMillis = flushIntervalMillis;
         this.dataList = new ArrayList<>();
         this.lastDataTimestamp = Long.MAX_VALUE;
-
         this.scheduledFuture =
-                JMThread.runWithScheduleAtFixedRate(flushIntervalMillis,
-                        flushIntervalMillis, this::checkIntervalAndFlush);
+                JMThread.runWithScheduleAtFixedRate(this.flushIntervalMillis,
+                        this.flushIntervalMillis, this::checkIntervalAndFlush);
     }
 
     private void checkIntervalAndFlush() {
@@ -97,11 +104,10 @@ public class BulkSubmissionPublisher<T> extends JMListSubmissionPublisher<T>
      * @return the int
      */
     public int submit(T[] dataArray) {
-        return submit(Optional.ofNullable(dataArray).map(Arrays::asList)
+        return submitBulk(Optional.ofNullable(dataArray).map(Arrays::asList)
                 .orElseGet(Collections::emptyList));
     }
 
-    @Override
     public int submit(List<T> itemList) {
         return JMOptional.getOptional(itemList).map(this::submitBulk).orElse(0);
     }
@@ -114,7 +120,7 @@ public class BulkSubmissionPublisher<T> extends JMListSubmissionPublisher<T>
             } else
                 for (T data : dataList)
                     submitSingle(data);
-            return dataList.size();
+            return this.dataList.size();
         }
     }
 
@@ -147,7 +153,7 @@ public class BulkSubmissionPublisher<T> extends JMListSubmissionPublisher<T>
         JMLog.debug(log, "flush", this.dataList.size());
         synchronized (this.dataList) {
             if (this.dataList.size() > 0) {
-                super.submit(this.dataList);
+                this.listSubmissionPublisher.submit(this.dataList);
                 this.dataList = new ArrayList<>();
             }
         }
@@ -156,20 +162,21 @@ public class BulkSubmissionPublisher<T> extends JMListSubmissionPublisher<T>
     @Override
     public void close() {
         JMLog.info(log, "close");
-        scheduledFuture.cancel(false);
+        this.scheduledFuture.cancel(false);
+        this.listSubmissionPublisher.close();
     }
 
     @Override
-    public BulkSubmissionPublisher<T> subscribeWith(
-            Flow.Subscriber<List<T>>... subscribers) {
-        super.subscribeWith(subscribers);
-        return this;
+    public String toString() {
+        return "BulkSubmissionPublisher(listSubmissionPublisher=" +
+                listSubmissionPublisher.toString() + ", bulkSize=" +
+                this.bulkSize + ", flushIntervalMillis=" +
+                this.flushIntervalMillis + ", dataList=" + this.dataList + ")";
     }
 
+
     @Override
-    public BulkSubmissionPublisher<T> consumeWith(
-            Consumer<List<T>>... consumers) {
-        super.consumeWith(consumers);
-        return this;
+    public void subscribe(Flow.Subscriber<? super List<T>> subscriber) {
+        this.listSubmissionPublisher.subscribe(subscriber);
     }
 }

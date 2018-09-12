@@ -10,8 +10,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BulkSubmissionPublisherTest {
@@ -20,20 +18,14 @@ public class BulkSubmissionPublisherTest {
     }
 
     private BulkSubmissionPublisher<String> bulkSubmissionPublisher;
-    private WaitingSubmissionPublisher<String> stringWaitingSubmissionPublisher;
 
     @Before
     public void setUp() {
-        this.stringWaitingSubmissionPublisher =
-                new WaitingSubmissionPublisher<>();
-        this.bulkSubmissionPublisher =
-                new WaitingBulkSubmissionPublisher<>(
-                        stringWaitingSubmissionPublisher, 10);
+        this.bulkSubmissionPublisher = new BulkSubmissionPublisher<>(10);
     }
 
     @After
     public void tearDown() {
-        this.stringWaitingSubmissionPublisher.close();
         this.bulkSubmissionPublisher.close();
     }
 
@@ -46,39 +38,32 @@ public class BulkSubmissionPublisherTest {
                         atomicInteger.incrementAndGet() + " " +
                                 count.addAndGet(list.size()) + " list - " +
                                 list));
-        bulkSubmissionPublisher.submit(
-                JMArrays.toArray(
-                        JMResources.readLines("webAccessLogSample.txt")));
+        bulkSubmissionPublisher.submit(JMArrays
+                .toArray(JMResources.readLines("webAccessLogSample.txt")));
         System.out.println(atomicInteger);
-        JMThread.sleep(2000);
+        JMThread.sleep(100);
         System.out.println(atomicInteger);
         System.out.println(count);
-        Assert.assertEquals(103, atomicInteger.longValue());
-        Assert.assertEquals(1024, count.longValue());
+        Assert.assertEquals(102, atomicInteger.longValue());
+        Assert.assertEquals(1020, count.longValue());
     }
 
     @Test
     public void submitSingle() {
         AtomicInteger atomicInteger = new AtomicInteger();
-        AtomicInteger count = new AtomicInteger(-1);
+        AtomicInteger count = new AtomicInteger();
         bulkSubmissionPublisher
                 .subscribe(JMSubscriberBuilder.getSOPLSubscriber(list ->
                         atomicInteger.incrementAndGet() + " " +
                                 count.addAndGet(list.size()) + " list - " +
                                 list));
-
-        Map<Integer, List<String>> listMap = JMLambda.groupBy(
-                JMResources.readLines("webAccessLogSample.txt"),
-                t -> count.incrementAndGet() / 10);
-        count.set(0);
-        listMap.values().forEach(bulkSubmissionPublisher::submit);
-        listMap.get(0).stream().limit(6)
-                .forEach(stringWaitingSubmissionPublisher::submit);
-        JMThread.sleep(1000);
+        JMLambda.groupBy(JMResources.readLines("webAccessLogSample.txt"),
+                s -> s.length() / 10).values()
+                .forEach(bulkSubmissionPublisher::submit);
+        JMThread.sleep(100);
         System.out.println(atomicInteger);
         System.out.println(count);
-        Assert.assertEquals(103, atomicInteger.longValue());
-        Assert.assertEquals(1030, count.longValue());
-        JMThread.sleep(10000);
+        Assert.assertEquals(102, atomicInteger.longValue());
+        Assert.assertEquals(1020, count.longValue());
     }
 }

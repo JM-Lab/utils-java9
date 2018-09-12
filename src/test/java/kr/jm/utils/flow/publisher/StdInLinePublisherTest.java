@@ -42,10 +42,9 @@ public class StdInLinePublisherTest {
         List<String> resultLineList = new ArrayList<>();
         this.stdInLinePublisher
                 .subscribeWith(JMSubscriberBuilder.getSOPLSubscriber())
-                .subscribeAndReturnSubcriber(
-                        JMSubscriberBuilder.build(resultLineList::add));
+                .subscribe(JMSubscriberBuilder.build(resultLineList::add));
         this.stdInLinePublisher.consumeStdIn();
-        JMThread.sleep(1000);
+
         List<String> stdInLineList =
                 JMResources.readLines("webAccessLogSample.txt");
         stdInLineList.forEach(this.printWriter::println);

@@ -9,18 +9,17 @@ import java.io.File;
 import java.util.List;
 
 /**
- * The interface String list submission publisher interface.
+ * The type String list submission publisher.
  */
-public interface StringListSubmissionPublisherInterface extends
-        JMSubmissionPublisherInterface<List<String>> {
-
+public class ResourceSubmissionPublisher extends
+        JMSubmissionPublisher<List<String>> {
     /**
      * Submit file path int.
      *
      * @param filePath the file path
      * @return the int
      */
-    default int submitFilePath(String filePath) {
+    public int submitFilePath(String filePath) {
         return submitFile(JMPath.getPath(filePath).toFile());
     }
 
@@ -30,7 +29,7 @@ public interface StringListSubmissionPublisherInterface extends
      * @param file the file
      * @return the int
      */
-    default int submitFile(File file) {
+    public int submitFile(File file) {
         return submit(JMFiles.readLines(file));
     }
 
@@ -40,7 +39,7 @@ public interface StringListSubmissionPublisherInterface extends
      * @param resourceClasspath the resource classpath
      * @return the int
      */
-    default int submitClasspath(String resourceClasspath) {
+    public int submitClasspath(String resourceClasspath) {
         return submit(JMResources.readLines(resourceClasspath));
     }
 
@@ -50,12 +49,11 @@ public interface StringListSubmissionPublisherInterface extends
      * @param filePathOrResourceClasspath the file path or resource classpath
      * @return the int
      */
-    default int submitFilePathOrClasspath(
+    public int submitFilePathOrClasspath(
             String filePathOrResourceClasspath) {
         return submit(JMOptional
                 .getOptional(JMFiles.readLines(filePathOrResourceClasspath))
                 .orElseGet(() -> JMResources
                         .readLines(filePathOrResourceClasspath)));
     }
-
 }

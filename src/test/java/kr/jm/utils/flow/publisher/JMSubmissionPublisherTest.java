@@ -11,24 +11,22 @@ import org.junit.Test;
 import java.util.concurrent.Flow;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class WaitingSubmissionPublisherTest {
+public class JMSubmissionPublisherTest {
 
     static {
         System.setProperty("org.slf4j.simpleLogger.defaultLogLevel", "debug");
     }
 
-    private WaitingSubmissionPublisher<String>
-            waitingSubmissionPublisher;
+    private JMSubmissionPublisher<String> submissionPublisher;
 
     @Before
     public void setUp() {
-        this.waitingSubmissionPublisher =
-                new WaitingSubmissionPublisher<>(1);
+        this.submissionPublisher = new JMSubmissionPublisher<>(3);
     }
 
     @After
     public void tearDown() {
-        this.waitingSubmissionPublisher.close();
+        this.submissionPublisher.close();
     }
 
     @Test
@@ -64,17 +62,14 @@ public class WaitingSubmissionPublisherTest {
 
         String path = JMResources.getURI("webAccessLogSample.txt").getPath();
         System.out.println(path);
-        waitingSubmissionPublisher.subscribe(subscriber);
-        JMFiles.getLineStream(path).filter(s -> s.length() % 2 == 0)
-                .forEach(waitingSubmissionPublisher::submit);
-        waitingSubmissionPublisher.consume(s
+        submissionPublisher.subscribe(subscriber);
+        submissionPublisher.consume(s
                 -> System.out.println(atomicInteger.incrementAndGet()
                 + "- singleSubscriber - " + s));
-        JMFiles.getLineStream(path).filter(s -> s.length() % 2 == 1)
-                .forEach(waitingSubmissionPublisher::submit);
-        JMThread.sleep(3000);
+        JMFiles.getLineStream(path).forEach(submissionPublisher::submit);
+        JMThread.sleep(1000);
 
-        Assert.assertEquals(1575, atomicInteger.intValue());
+        Assert.assertEquals(2048, atomicInteger.intValue());
 
     }
 

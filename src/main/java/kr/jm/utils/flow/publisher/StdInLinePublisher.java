@@ -5,8 +5,7 @@ import kr.jm.utils.StdInLineConsumer;
 /**
  * The type Std in line publisher.
  */
-public class StdInLinePublisher extends JMSubmissionPublisher<String> implements
-        AutoCloseable {
+public class StdInLinePublisher extends JMSubmissionPublisher<String> {
 
     private StdInLineConsumer stdInLineConsumer;
 
@@ -30,5 +29,6 @@ public class StdInLinePublisher extends JMSubmissionPublisher<String> implements
     @Override
     public void close() {
         stdInLineConsumer.close();
+        super.close();
     }
 }
