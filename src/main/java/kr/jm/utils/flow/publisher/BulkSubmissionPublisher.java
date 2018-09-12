@@ -25,7 +25,7 @@ public class BulkSubmissionPublisher<T> implements
     /**
      * The constant DEFAULT_FLUSH_INTERVAL_Millis.
      */
-    public static final int DEFAULT_FLUSH_INTERVAL_Millis = 100;
+    public static final long DEFAULT_FLUSH_INTERVAL_Millis = 100;
 
     private SubmissionPublisher<List<T>> listSubmissionPublisher;
     /**
@@ -70,7 +70,7 @@ public class BulkSubmissionPublisher<T> implements
      * @param bulkSize            the bulk size
      * @param flushIntervalMillis the flush interval seconds
      */
-    public BulkSubmissionPublisher(int bulkSize, int flushIntervalMillis) {
+    public BulkSubmissionPublisher(int bulkSize, long flushIntervalMillis) {
         this(new JMSubmissionPublisher<>(), bulkSize, flushIntervalMillis);
     }
 
