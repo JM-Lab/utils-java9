@@ -1,12 +1,12 @@
 package kr.jm.utils.flow.publisher;
 
-import kr.jm.utils.enums.OS;
 import kr.jm.utils.exception.JMExceptionManager;
 import kr.jm.utils.helper.JMLog;
 import kr.jm.utils.helper.JMThread;
 import org.slf4j.Logger;
 
 import java.util.concurrent.Flow;
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.SubmissionPublisher;
 
 /**
@@ -16,7 +16,7 @@ import java.util.concurrent.SubmissionPublisher;
  */
 public class JMSubmissionPublisher<T> extends
         SubmissionPublisher<T> implements JMPublisherInterface<T> {
-    private int workers;
+    private int publishers;
     private int maxBufferCapacity;
     private long waitingMillis;
     /**
@@ -24,27 +24,25 @@ public class JMSubmissionPublisher<T> extends
      */
     protected final Logger log = org.slf4j.LoggerFactory.getLogger(getClass());
 
-    public JMSubmissionPublisher(int workers, int maxBufferCapacity,
+    public JMSubmissionPublisher(int publishers, int maxBufferCapacity,
             long waitingMillis) {
-        super(JMThread.newThreadPool(workers), maxBufferCapacity);
-        this.workers = workers;
+        super(publishers > 0 ? JMThread.newThreadPool(publishers) : ForkJoinPool
+                .commonPool(), maxBufferCapacity);
+        this.publishers = publishers;
         this.maxBufferCapacity = maxBufferCapacity;
         this.waitingMillis = waitingMillis;
     }
 
-    public JMSubmissionPublisher(int workers, int maxBufferCapacity) {
-        this(workers, maxBufferCapacity, JMThread.DEFAULT_WAITING_MILLIS);
+    public JMSubmissionPublisher(int publishers, int maxBufferCapacity) {
+        this(publishers, maxBufferCapacity, JMThread.DEFAULT_WAITING_MILLIS);
     }
 
-    public JMSubmissionPublisher(int workers) {
-        this(workers, Flow.defaultBufferSize());
+    public JMSubmissionPublisher(int publishers) {
+        this(publishers, Flow.defaultBufferSize());
     }
 
-    /**
-     * Instantiates a new Submission publisher implements jm.
-     */
     public JMSubmissionPublisher() {
-        this(OS.getAvailableProcessors());
+        this(0);
     }
 
     @Override
@@ -75,7 +73,7 @@ public class JMSubmissionPublisher<T> extends
 
     @Override
     public String toString() {
-        return "JMSubmissionPublisher{" + "workers=" + workers +
+        return "JMSubmissionPublisher{" + "publishers=" + publishers +
                 ", maxBufferCapacity=" + maxBufferCapacity +
                 ", waitingMillis=" + waitingMillis + '}';
     }

@@ -1,7 +1,7 @@
 JMLab Java 9 Utility Libraries
 ==============================
 ## version
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/kr.jmlab/jmlab-utils-java9/badge.svg)](http://search.maven.org/#artifactdetails%7Ckr.jmlab%7Cjmlab-utils-java9%7C0.1.3%7Cjar)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/kr.jmlab/jmlab-utils-java9/badge.svg)](http://search.maven.org/#artifactdetails%7Ckr.jmlab%7Cjmlab-utils-java9%7C0.1.4%7Cjar)
 
 ## Prerequisites:
 * Java 9 or later
@@ -9,14 +9,14 @@ JMLab Java 9 Utility Libraries
 ## Usage
 Gradle:
 ```groovy
-compile 'kr.jmlab:jmlab-utils-java9:0.1.3'
+compile 'kr.jmlab:jmlab-utils-java9:0.1.4'
 ```
 Maven:
 ```xml
 <dependency>
     <groupId>kr.jmlab</groupId>
     <artifactId>jmlab-utils-java9</artifactId>
-    <version>0.1.3</version>
+    <version>0.1.4</version>
 </dependency>
 ```
 
@@ -25,16 +25,16 @@ Checkout the source code:
 
     git clone https://github.com/JM-Lab/utils-java9.git
     cd utils-java9
-    git checkout -b 0.1.3 origin/0.1.3
+    git checkout -b 0.1.4 origin/0.1.4
     mvn install
 
 ## Useful Utilities With New Features Of Java 9  :
 * **Flow Package ([Reactive Programming with JDK 9 Flow API](https://community.oracle.com/docs/DOC-1006738) Utility)**
 
 `JMSubmissionPublisher` `BulkSubmissionPublisher` 
-`StringListSubmissionPublisher` `StringBulkSubmissionPublisher` `StdInLinePublisher` `WaitingSubmissionPublisher` `WaitingBulkSubmissionPublisher` `BulkWaitingSubmissionPublisher`
+`ResourceSubmissionPublisher` `StdInLinePublisher`
 
-`JMTransformProcessor` `JMConcurrentTransformProcessor` `JMTransformProcessorBuilder`
+`JMTransformProcessor` `JMTransformProcessorBuilder`
 
 `JMSubscriber` `JMSubscriberBuilder`
 * **JMJson**

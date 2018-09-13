@@ -28,7 +28,7 @@ public class JMSubscriber<T> implements Flow.Subscriber<T> {
      */
     protected JMSubscriber() {
         this.dataConsumer =
-                d -> JMExceptionManager.logException(log,
+                d -> JMExceptionManager.handleException(log,
                         JMExceptionManager.newRunTimeException(
                                 "DataConsumer Wasn't Set !!! - Flush " + d),
                         "JMSubscriber");
@@ -62,7 +62,7 @@ public class JMSubscriber<T> implements Flow.Subscriber<T> {
 
     @Override
     public void onError(Throwable throwable) {
-        JMExceptionManager.logException(log, throwable, "onError");
+        JMExceptionManager.handleException(log, throwable, "onError");
     }
 
     @Override

@@ -6,13 +6,13 @@ import kr.jm.utils.helper.JMPath;
 import kr.jm.utils.helper.JMResources;
 
 import java.io.File;
-import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * The type String list submission publisher.
  */
-public class ResourceSubmissionPublisher extends
-        JMSubmissionPublisher<List<String>> {
+public class LineSubmissionPublisher extends
+        JMSubmissionPublisher<String> {
     /**
      * Submit file path int.
      *
@@ -30,8 +30,14 @@ public class ResourceSubmissionPublisher extends
      * @return the int
      */
     public int submitFile(File file) {
-        return submit(JMFiles.readLines(file));
+        return submitStream(JMFiles.readLines(file).stream());
+
     }
+
+    public int submitStream(Stream<String> stream) {
+        return stream.mapToInt(this::submit).sum();
+    }
+
 
     /**
      * Submit classpath int.
@@ -40,7 +46,7 @@ public class ResourceSubmissionPublisher extends
      * @return the int
      */
     public int submitClasspath(String resourceClasspath) {
-        return submit(JMResources.readLines(resourceClasspath));
+        return submitStream(JMResources.readLines(resourceClasspath).stream());
     }
 
     /**
@@ -51,9 +57,9 @@ public class ResourceSubmissionPublisher extends
      */
     public int submitFilePathOrClasspath(
             String filePathOrResourceClasspath) {
-        return submit(JMOptional
+        return submitStream(JMOptional
                 .getOptional(JMFiles.readLines(filePathOrResourceClasspath))
                 .orElseGet(() -> JMResources
-                        .readLines(filePathOrResourceClasspath)));
+                        .readLines(filePathOrResourceClasspath)).stream());
     }
 }

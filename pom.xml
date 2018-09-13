@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>kr.jmlab</groupId>
     <artifactId>jmlab-utils-java9</artifactId>
-    <version>0.1.3</version>
+    <version>0.1.4-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>JMLab-Utils-Java9</name>
     <description>Java 9 Utility Libraries</description>
@@ -36,7 +36,7 @@
         <java.version>9</java.version>
         <slf4j.version>1.7.25</slf4j.version>
         <junit.version>4.12</junit.version>
-        <jmlab-utils-java8.version>0.1.93</jmlab-utils-java8.version>
+        <jmlab-utils-java8.version>0.1.94-SNAPSHOT</jmlab-utils-java8.version>
         <jackson-databind.version>2.9.5</jackson-databind.version>
         <httpclient.version>4.5.3</httpclient.version>
     </properties>

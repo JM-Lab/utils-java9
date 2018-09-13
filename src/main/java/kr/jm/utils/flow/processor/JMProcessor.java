@@ -18,14 +18,15 @@ import java.util.function.Function;
  * @param <R> the type parameter
  */
 public class JMProcessor<T, R> implements
-        JMProcessorInterface<T, R> {
+        JMProcessorInterface<T, R>, AutoCloseable {
     /**
      * The Log.
      */
     protected final Logger log =
             org.slf4j.LoggerFactory.getLogger(getClass());
-    private JMSubscriber<T> inputSubscriber;
+    private Function<T, R> transformFunction;
     private JMSubmissionPublisher<R> outputPublisher;
+    private JMSubscriber<T> inputSubscriber;
 
     /**
      * Instantiates a new Jm transform processor.
@@ -33,19 +34,17 @@ public class JMProcessor<T, R> implements
      * @param transformFunction the transform function
      */
     public JMProcessor(Function<T, R> transformFunction) {
+        this.transformFunction = transformFunction;
         this.outputPublisher = new JMSubmissionPublisher<>();
-        this.inputSubscriber = JMSubscriberBuilder.build(t -> Optional
-                .ofNullable(verifyTransformFunction(transformFunction, t))
-                .ifPresent(outputPublisher::submit));
+        this.inputSubscriber = JMSubscriberBuilder.build(this::process);
     }
 
-    private <I, O> O verifyTransformFunction(Function<I, O> transformFunction,
-            I i) {
+    protected void process(T input) {
         try {
-            return transformFunction.apply(i);
+            Optional.ofNullable(this.transformFunction.apply(input))
+                    .ifPresent(this.outputPublisher::submit);
         } catch (Exception e) {
-            return JMExceptionManager.handleExceptionAndReturnNull(log, e,
-                    "verifyTransformFunction", i);
+            JMExceptionManager.handleException(log, e, "process", input);
         }
     }
 
@@ -76,5 +75,11 @@ public class JMProcessor<T, R> implements
     public void subscribe(Flow.Subscriber<? super R> subscriber) {
         JMLog.info(log, "subscribe", subscriber);
         this.outputPublisher.subscribe(subscriber);
+    }
+
+    @Override
+    public void close() {
+        JMLog.info(log, "close");
+        this.outputPublisher.close();
     }
 }
