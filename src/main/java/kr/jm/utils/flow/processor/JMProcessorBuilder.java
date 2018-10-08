@@ -51,13 +51,13 @@ public class JMProcessorBuilder {
         };
     }
 
-    public static <I, O> JMProcessor<I, O> buildWithThreadPool(
+    public static <I, O> JMConcurrentProcessor<I, O> buildWithThreadPool(
             Function<I, O> transformerFunction) {
         return buildWithThreadPool(OS.getAvailableProcessors(),
                 transformerFunction);
     }
 
-    public static <I, O> JMProcessor<I, O> buildWithThreadPool(
+    public static <I, O> JMConcurrentProcessor<I, O> buildWithThreadPool(
             int workers, Function<I, O> transformerFunction) {
         return new JMConcurrentProcessor<>(workers, transformerFunction);
     }
