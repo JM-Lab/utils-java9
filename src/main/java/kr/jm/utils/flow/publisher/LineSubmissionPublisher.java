@@ -9,7 +9,7 @@ import java.io.File;
 import java.util.stream.Stream;
 
 /**
- * The type String list submission publisher.
+ * The type Line submission publisher.
  */
 public class LineSubmissionPublisher extends
         JMSubmissionPublisher<String> {
@@ -34,6 +34,12 @@ public class LineSubmissionPublisher extends
 
     }
 
+    /**
+     * Submit stream int.
+     *
+     * @param stream the stream
+     * @return the int
+     */
     public int submitStream(Stream<String> stream) {
         return stream.mapToInt(this::submit).sum();
     }

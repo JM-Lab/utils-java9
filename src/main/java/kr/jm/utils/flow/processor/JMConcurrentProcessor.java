@@ -7,7 +7,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.function.Function;
 
 /**
- * The type Jm concurrent transform processor.
+ * The type Jm concurrent processor.
  *
  * @param <T> the type parameter
  * @param <R> the type parameter
@@ -17,6 +17,12 @@ public class JMConcurrentProcessor<T, R> extends
 
     private ExecutorService executorService;
 
+    /**
+     * Instantiates a new Jm concurrent processor.
+     *
+     * @param workers             the workers
+     * @param transformerFunction the transformer function
+     */
     public JMConcurrentProcessor(int workers,
             Function<T, R> transformerFunction) {
         super(transformerFunction);

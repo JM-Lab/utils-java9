@@ -17,6 +17,9 @@ import java.util.concurrent.SubmissionPublisher;
  */
 public class BulkSubmissionPublisher<T> implements
         JMPublisherInterface<List<T>>, AutoCloseable {
+    /**
+     * The Log.
+     */
     protected final Logger log = org.slf4j.LoggerFactory.getLogger(getClass());
     /**
      * The constant DEFAULT_BULK_SIZE.
@@ -68,12 +71,19 @@ public class BulkSubmissionPublisher<T> implements
      * Instantiates a new Bulk submission publisher.
      *
      * @param bulkSize            the bulk size
-     * @param flushIntervalMillis the flush interval seconds
+     * @param flushIntervalMillis the flush interval millis
      */
     public BulkSubmissionPublisher(int bulkSize, long flushIntervalMillis) {
         this(new JMSubmissionPublisher<>(), bulkSize, flushIntervalMillis);
     }
 
+    /**
+     * Instantiates a new Bulk submission publisher.
+     *
+     * @param listSubmissionPublisher the list submission publisher
+     * @param bulkSize                the bulk size
+     * @param flushIntervalMillis     the flush interval millis
+     */
     public BulkSubmissionPublisher(
             SubmissionPublisher<List<T>> listSubmissionPublisher, int bulkSize,
             long flushIntervalMillis) {
@@ -108,6 +118,12 @@ public class BulkSubmissionPublisher<T> implements
                 .orElseGet(Collections::emptyList));
     }
 
+    /**
+     * Submit int.
+     *
+     * @param itemList the item list
+     * @return the int
+     */
     public int submit(List<T> itemList) {
         return JMOptional.getOptional(itemList).map(this::submitBulk).orElse(0);
     }

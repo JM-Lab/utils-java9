@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * The interface Jm transform processor interface.
+ * The interface Jm processor interface.
  *
  * @param <T> the type parameter
  * @param <R> the type parameter
@@ -29,11 +29,11 @@ public interface JMProcessorInterface<T, R> extends
     }
 
     /**
-     * Subscribe and return processor jm transform processor interface.
+     * Subscribe and return processor jm processor interface.
      *
      * @param <O>                 the type parameter
      * @param transformerFunction the transformer function
-     * @return the jm transform processor interface
+     * @return the jm processor interface
      */
     default <O> JMProcessorInterface<R, O> subscribeAndReturnProcessor(
             Function<R, O> transformerFunction) {
@@ -42,11 +42,11 @@ public interface JMProcessorInterface<T, R> extends
     }
 
     /**
-     * Subscribe and return processor with thread pool jm transform processor interface.
+     * Subscribe and return processor with thread pool jm processor interface.
      *
      * @param <O>                 the type parameter
      * @param transformerFunction the transformer function
-     * @return the jm transform processor interface
+     * @return the jm processor interface
      */
     default <O> JMProcessorInterface<R, O> subscribeAndReturnProcessorWithThreadPool(
             Function<R, O> transformerFunction) {

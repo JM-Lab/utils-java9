@@ -24,6 +24,13 @@ public class JMSubmissionPublisher<T> extends
      */
     protected final Logger log = org.slf4j.LoggerFactory.getLogger(getClass());
 
+    /**
+     * Instantiates a new Jm submission publisher.
+     *
+     * @param publishers        the publishers
+     * @param maxBufferCapacity the max buffer capacity
+     * @param waitingMillis     the waiting millis
+     */
     public JMSubmissionPublisher(int publishers, int maxBufferCapacity,
             long waitingMillis) {
         super(publishers > 0 ? JMThread.newThreadPool(publishers) : ForkJoinPool
@@ -33,14 +40,28 @@ public class JMSubmissionPublisher<T> extends
         this.waitingMillis = waitingMillis;
     }
 
+    /**
+     * Instantiates a new Jm submission publisher.
+     *
+     * @param publishers        the publishers
+     * @param maxBufferCapacity the max buffer capacity
+     */
     public JMSubmissionPublisher(int publishers, int maxBufferCapacity) {
         this(publishers, maxBufferCapacity, JMThread.DEFAULT_WAITING_MILLIS);
     }
 
+    /**
+     * Instantiates a new Jm submission publisher.
+     *
+     * @param publishers the publishers
+     */
     public JMSubmissionPublisher(int publishers) {
         this(publishers, Flow.defaultBufferSize());
     }
 
+    /**
+     * Instantiates a new Jm submission publisher.
+     */
     public JMSubmissionPublisher() {
         this(0);
     }

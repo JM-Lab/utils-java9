@@ -12,7 +12,7 @@ import java.util.concurrent.Flow;
 import java.util.function.Function;
 
 /**
- * The type Jm transform processor.
+ * The type Jm processor.
  *
  * @param <T> the type parameter
  * @param <R> the type parameter
@@ -29,7 +29,7 @@ public class JMProcessor<T, R> implements
     private JMSubscriber<T> inputSubscriber;
 
     /**
-     * Instantiates a new Jm transform processor.
+     * Instantiates a new Jm processor.
      *
      * @param transformFunction the transform function
      */
@@ -39,6 +39,11 @@ public class JMProcessor<T, R> implements
         this.inputSubscriber = JMSubscriberBuilder.build(this::process);
     }
 
+    /**
+     * Process.
+     *
+     * @param input the input
+     */
     protected void process(T input) {
         try {
             Optional.ofNullable(this.transformFunction.apply(input))
