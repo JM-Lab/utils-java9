@@ -69,8 +69,16 @@ public class RestfulResourceUpdater<T> {
      */
     public RestfulResourceUpdater(String restfulResourceUrl, int periodSeconds,
             long initialDelayMillis, Consumer<T> updateConsumer) {
+        this(restfulResourceUrl, periodSeconds, initialDelayMillis,
+                updateConsumer, new TypeReference<>() {});
+    }
+
+    public RestfulResourceUpdater(String restfulResourceUrl,
+            int periodSeconds,
+            long initialDelayMillis, Consumer<T> updateConsumer,
+            TypeReference<T> typeReference) {
         this.restfulResourceUrl = restfulResourceUrl;
-        this.typeReference = new TypeReference<>() {};
+        this.typeReference = typeReference;
         if (periodSeconds > 0)
             JMThread.runWithScheduleAtFixedRate(initialDelayMillis,
                     TimeUnit.SECONDS.toMillis(periodSeconds),
@@ -87,7 +95,7 @@ public class RestfulResourceUpdater<T> {
     public Optional<T> updateResourceWithLog() {
         Optional<T> resourceAsOpt = updateResource();
         log.debug("Updated Resource - {}",
-                updateResource().isPresent() ? "YES" : "NO");
+                resourceAsOpt.isPresent() ? "YES" : "NO");
         return resourceAsOpt;
     }
 
