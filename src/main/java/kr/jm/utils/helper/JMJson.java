@@ -31,10 +31,10 @@ public class JMJson {
     public static final TypeReference<List<Object>> LIST_TYPE_REFERENCE =
             getMapOrListTypeReference();
     /**
-     * The constant LIST_MAP_TYPE_REFERENCE.
+     * The constant MAP_LIST_TYPE_REFERENCE.
      */
     public static final TypeReference<List<Map<String, Object>>>
-            LIST_MAP_TYPE_REFERENCE = getMapOrListTypeReference();
+            MAP_LIST_TYPE_REFERENCE = getMapOrListTypeReference();
 
     /**
      * Gets map or list type reference.
@@ -189,7 +189,7 @@ public class JMJson {
      */
     public static List<Map<String, Object>> toMapList(
             String jsonMapListString) {
-        return withJsonString(jsonMapListString, LIST_MAP_TYPE_REFERENCE);
+        return withJsonString(jsonMapListString, MAP_LIST_TYPE_REFERENCE);
     }
 
     /**
@@ -431,10 +431,11 @@ public class JMJson {
     /**
      * To pretty json string string.
      *
+     * @param <D>    the type parameter
      * @param object the object
      * @return the string
      */
-    public static String toPrettyJsonString(Object object) {
+    public static <D> String toPrettyJsonString(D object) {
         try {
             return jsonMapper.writerWithDefaultPrettyPrinter()
                     .writeValueAsString(object);
@@ -445,4 +446,23 @@ public class JMJson {
     }
 
 
+    /**
+     * Println json string.
+     *
+     * @param <D>    the type parameter
+     * @param Object the object
+     */
+    public static <D> void printlnJsonString(D Object) {
+        System.out.println(toJsonString(Object));
+    }
+
+    /**
+     * Println pretty json string.
+     *
+     * @param <D>    the type parameter
+     * @param Object the object
+     */
+    public static <D> void printlnPrettyJsonString(D Object) {
+        System.out.println(toPrettyJsonString(Object));
+    }
 }

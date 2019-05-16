@@ -101,7 +101,7 @@ public class BulkSubmissionPublisher<T> implements
         if (this.lastDataTimestamp <
                 System.currentTimeMillis() - this.flushIntervalMillis &&
                 this.dataList.size() > 0) {
-            JMLog.warn(log, "checkIntervalAndFlush", this
+            JMLog.info(log, "checkIntervalAndFlush", this
                     .lastDataTimestamp, this.flushIntervalMillis);
             flush();
         }

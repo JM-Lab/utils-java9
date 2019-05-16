@@ -31,7 +31,7 @@ public class JMProcessor<T, R> implements
     /**
      * Instantiates a new Jm processor.
      *
-     * @param transformFunction the transform function
+     * @param transformFunction the transform custom
      */
     public JMProcessor(Function<T, R> transformFunction) {
         this.transformFunction = transformFunction;
