@@ -85,24 +85,21 @@ public class BulkSubmissionPublisher<T> implements
      * @param flushIntervalMillis     the flush interval millis
      */
     public BulkSubmissionPublisher(
-            SubmissionPublisher<List<T>> listSubmissionPublisher, int bulkSize,
-            long flushIntervalMillis) {
+            SubmissionPublisher<List<T>> listSubmissionPublisher, int bulkSize, long flushIntervalMillis) {
         this.listSubmissionPublisher = listSubmissionPublisher;
         this.bulkSize = bulkSize;
         this.flushIntervalMillis = flushIntervalMillis;
         this.dataList = new ArrayList<>();
         this.lastDataTimestamp = Long.MAX_VALUE;
         this.scheduledFuture =
-                JMThread.runWithScheduleAtFixedRate(this.flushIntervalMillis,
-                        this.flushIntervalMillis, this::checkIntervalAndFlush);
+                JMThread.runWithScheduleAtFixedRate(this.flushIntervalMillis, this.flushIntervalMillis,
+                        this::checkIntervalAndFlush);
     }
 
     private void checkIntervalAndFlush() {
         if (this.lastDataTimestamp <
-                System.currentTimeMillis() - this.flushIntervalMillis &&
-                this.dataList.size() > 0) {
-            JMLog.info(log, "checkIntervalAndFlush", this
-                    .lastDataTimestamp, this.flushIntervalMillis);
+                System.currentTimeMillis() - this.flushIntervalMillis && this.dataList.size() > 0) {
+            JMLog.debug(log, "checkIntervalAndFlush", this.lastDataTimestamp, this.flushIntervalMillis);
             flush();
         }
     }
@@ -114,8 +111,7 @@ public class BulkSubmissionPublisher<T> implements
      * @return the int
      */
     public int submit(T[] dataArray) {
-        return submitBulk(Optional.ofNullable(dataArray).map(Arrays::asList)
-                .orElseGet(Collections::emptyList));
+        return submitBulk(Optional.ofNullable(dataArray).map(Arrays::asList).orElseGet(Collections::emptyList));
     }
 
     /**
@@ -184,12 +180,10 @@ public class BulkSubmissionPublisher<T> implements
 
     @Override
     public String toString() {
-        return "BulkSubmissionPublisher(listSubmissionPublisher=" +
-                listSubmissionPublisher.toString() + ", bulkSize=" +
-                this.bulkSize + ", flushIntervalMillis=" +
-                this.flushIntervalMillis + ", dataList=" + this.dataList + ")";
+        return "BulkSubmissionPublisher(listSubmissionPublisher=" + listSubmissionPublisher.toString() + ", bulkSize=" +
+                this.bulkSize + ", flushIntervalMillis=" + this.flushIntervalMillis + ", dataList=" + this.dataList +
+                ")";
     }
-
 
     @Override
     public void subscribe(Flow.Subscriber<? super List<T>> subscriber) {
