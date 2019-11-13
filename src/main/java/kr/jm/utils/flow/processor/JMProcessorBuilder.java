@@ -16,7 +16,7 @@ public class JMProcessorBuilder {
      *
      * @param <I>                 the type parameter
      * @param <O>                 the type parameter
-     * @param transformerFunction the transformer custom
+     * @param transformerFunction the transformer function
      * @return the jm processor
      */
     public static <I, O> JMProcessor<I, O> build(
@@ -66,7 +66,7 @@ public class JMProcessorBuilder {
      *
      * @param <I>                 the type parameter
      * @param <O>                 the type parameter
-     * @param transformerFunction the transformer custom
+     * @param transformerFunction the transformer function
      * @return the jm concurrent processor
      */
     public static <I, O> JMConcurrentProcessor<I, O> buildWithThreadPool(
@@ -81,7 +81,7 @@ public class JMProcessorBuilder {
      * @param <I>                 the type parameter
      * @param <O>                 the type parameter
      * @param workers             the workers
-     * @param transformerFunction the transformer custom
+     * @param transformerFunction the transformer function
      * @return the jm concurrent processor
      */
     public static <I, O> JMConcurrentProcessor<I, O> buildWithThreadPool(

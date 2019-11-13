@@ -18,23 +18,19 @@ import java.util.Map;
  */
 public class JMJson {
 
-    private static final Logger log =
-            org.slf4j.LoggerFactory.getLogger(JMJson.class);
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(JMJson.class);
     /**
      * The constant MAP_TYPE_REFERENCE.
      */
-    public static final TypeReference<Map<String, Object>> MAP_TYPE_REFERENCE =
-            getMapOrListTypeReference();
+    public static final TypeReference<Map<String, Object>> MAP_TYPE_REFERENCE = getMapOrListTypeReference();
     /**
      * The constant LIST_TYPE_REFERENCE.
      */
-    public static final TypeReference<List<Object>> LIST_TYPE_REFERENCE =
-            getMapOrListTypeReference();
+    public static final TypeReference<List<Object>> LIST_TYPE_REFERENCE = getMapOrListTypeReference();
     /**
      * The constant MAP_LIST_TYPE_REFERENCE.
      */
-    public static final TypeReference<List<Map<String, Object>>>
-            MAP_LIST_TYPE_REFERENCE = getMapOrListTypeReference();
+    public static final TypeReference<List<Map<String, Object>>> MAP_LIST_TYPE_REFERENCE = getMapOrListTypeReference();
 
     /**
      * Gets map or list type reference.
@@ -46,10 +42,10 @@ public class JMJson {
         return new TypeReference<>() {};
     }
 
-    private static ObjectMapper jsonMapper = new ObjectMapper()
-            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-            .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
-            .enable(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL);
+    private static ObjectMapper jsonMapper =
+            new ObjectMapper().disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                    .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
+                    .enable(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_AS_NULL);
 
     /**
      * To json string string.
@@ -62,8 +58,7 @@ public class JMJson {
         try {
             return jsonMapper.writeValueAsString(dataObject);
         } catch (Exception e) {
-            return JMExceptionManager.handleExceptionAndReturnNull(log, e,
-                    "toJsonString", dataObject);
+            return JMExceptionManager.handleExceptionAndReturnNull(log, e, "toJsonString", dataObject);
         }
     }
 
@@ -89,8 +84,7 @@ public class JMJson {
             jsonMapper.writeValue(returnJsonFile, jsonString);
             return returnJsonFile;
         } catch (Exception e) {
-            return JMExceptionManager.handleExceptionAndReturnNull(log, e,
-                    "toJsonFile", jsonString);
+            return JMExceptionManager.handleExceptionAndReturnNull(log, e, "toJsonFile", jsonString);
         }
     }
 
@@ -107,8 +101,7 @@ public class JMJson {
             jsonMapper.writeValue(returnJsonFile, dataObject);
             return returnJsonFile;
         } catch (Exception e) {
-            return JMExceptionManager.handleExceptionAndReturnNull(log, e,
-                    "toJsonFile", dataObject);
+            return JMExceptionManager.handleExceptionAndReturnNull(log, e, "toJsonFile", dataObject);
         }
     }
 
@@ -121,13 +114,11 @@ public class JMJson {
      * @param typeReference the type reference
      * @return the t
      */
-    public static <T> T withBytes(byte[] bytes,
-            TypeReference<T> typeReference) {
+    public static <T> T withBytes(byte[] bytes, TypeReference<T> typeReference) {
         try {
             return jsonMapper.readValue(bytes, typeReference);
         } catch (Exception e) {
-            return JMExceptionManager.handleExceptionAndReturnNull(log, e,
-                    "withBytes", new String(bytes));
+            return JMExceptionManager.handleExceptionAndReturnNull(log, e, "withBytes", new String(bytes));
         }
     }
 
@@ -143,8 +134,7 @@ public class JMJson {
         try {
             return jsonMapper.readValue(bytes, c);
         } catch (Exception e) {
-            return JMExceptionManager.handleExceptionAndReturnNull(log, e,
-                    "withBytes", new String(bytes));
+            return JMExceptionManager.handleExceptionAndReturnNull(log, e, "withBytes", new String(bytes));
         }
     }
 
@@ -156,8 +146,7 @@ public class JMJson {
      * @param typeReference the type reference
      * @return the t
      */
-    public static <T> T withJsonString(String jsonString,
-            TypeReference<T> typeReference) {
+    public static <T> T withJsonString(String jsonString, TypeReference<T> typeReference) {
         return withBytes(jsonString.getBytes(), typeReference);
     }
 
@@ -212,8 +201,7 @@ public class JMJson {
      * @param typeReference the type reference
      * @return the t
      */
-    public static <T> T withJsonFile(File jsonFile,
-            TypeReference<T> typeReference) {
+    public static <T> T withJsonFile(File jsonFile, TypeReference<T> typeReference) {
         try {
             return jsonMapper.readValue(jsonFile, typeReference);
         } catch (Exception e) {
@@ -247,13 +235,11 @@ public class JMJson {
      * @param typeReference the type reference
      * @return the t
      */
-    public static <T> T withJsonInputStream(InputStream inputStream,
-            TypeReference<T> typeReference) {
+    public static <T> T withJsonInputStream(InputStream inputStream, TypeReference<T> typeReference) {
         try {
             return jsonMapper.readValue(inputStream, typeReference);
         } catch (Exception e) {
-            return JMExceptionManager.handleExceptionAndReturnNull(log, e,
-                    "withJsonInputStream", inputStream);
+            return JMExceptionManager.handleExceptionAndReturnNull(log, e, "withJsonInputStream", inputStream);
         }
     }
 
@@ -265,13 +251,11 @@ public class JMJson {
      * @param c           the c
      * @return the t
      */
-    public static <T> T withJsonInputStream(InputStream inputStream,
-            Class<T> c) {
+    public static <T> T withJsonInputStream(InputStream inputStream, Class<T> c) {
         try {
             return jsonMapper.readValue(inputStream, c);
         } catch (Exception e) {
-            return JMExceptionManager.handleExceptionAndReturnNull(log, e,
-                    "withJsonInputStream", inputStream);
+            return JMExceptionManager.handleExceptionAndReturnNull(log, e, "withJsonInputStream", inputStream);
         }
     }
 
@@ -283,11 +267,8 @@ public class JMJson {
      * @param typeReference     the type reference
      * @return the t
      */
-    public static <T> T withJsonResource(String resourceClasspath,
-            TypeReference<T> typeReference) {
-        return withJsonInputStream(
-                JMResources.getResourceInputStream(resourceClasspath),
-                typeReference);
+    public static <T> T withJsonResource(String resourceClasspath, TypeReference<T> typeReference) {
+        return withJsonInputStream(JMResources.getResourceInputStream(resourceClasspath), typeReference);
     }
 
     /**
@@ -298,10 +279,8 @@ public class JMJson {
      * @param c                 the c
      * @return the t
      */
-    public static <T> T withJsonResource(String resourceClasspath,
-            Class<T> c) {
-        return withJsonInputStream(
-                JMResources.getResourceInputStream(resourceClasspath), c);
+    public static <T> T withJsonResource(String resourceClasspath, Class<T> c) {
+        return withJsonInputStream(JMResources.getResourceInputStream(resourceClasspath), c);
     }
 
     /**
@@ -312,12 +291,10 @@ public class JMJson {
      * @param typeReference                        the type reference
      * @return the t
      */
-    public static <T> T withRestOrClasspathOrFilePath(
-            String resourceRestUrlOrClasspathOrFilePath,
+    public static <T> T withRestOrClasspathOrFilePath(String resourceRestUrlOrClasspathOrFilePath,
             TypeReference<T> typeReference) {
         return withJsonString(
-                JMRestfulResource.getStringWithRestOrClasspathOrFilePath(
-                        resourceRestUrlOrClasspathOrFilePath),
+                JMRestfulResource.getStringWithRestOrClasspathOrFilePath(resourceRestUrlOrClasspathOrFilePath),
                 typeReference);
     }
 
@@ -329,12 +306,10 @@ public class JMJson {
      * @param typeReference                     the type reference
      * @return the t
      */
-    public static <T> T withRestOrFilePathOrClasspath(
-            String resourceRestOrFilePathOrClasspath,
+    public static <T> T withRestOrFilePathOrClasspath(String resourceRestOrFilePathOrClasspath,
             TypeReference<T> typeReference) {
         return withJsonString(
-                JMRestfulResource.getStringWithRestOrFilePathOrClasspath(
-                        resourceRestOrFilePathOrClasspath),
+                JMRestfulResource.getStringWithRestOrFilePathOrClasspath(resourceRestOrFilePathOrClasspath),
                 typeReference);
     }
 
@@ -346,11 +321,8 @@ public class JMJson {
      * @param typeReference               the type reference
      * @return the t
      */
-    public static <T> T withClasspathOrFilePath(
-            String resourceClasspathOrFilePath,
-            TypeReference<T> typeReference) {
-        return withJsonString(JMResources.getStringWithClasspathOrFilePath(
-                resourceClasspathOrFilePath), typeReference);
+    public static <T> T withClasspathOrFilePath(String resourceClasspathOrFilePath, TypeReference<T> typeReference) {
+        return withJsonString(JMResources.getStringWithClasspathOrFilePath(resourceClasspathOrFilePath), typeReference);
     }
 
     /**
@@ -361,12 +333,8 @@ public class JMJson {
      * @param typeReference               the type reference
      * @return the t
      */
-    public static <T> T withFilePathOrClasspath(
-            String resourceFilePathOrClasspath,
-            TypeReference<T> typeReference) {
-        return withJsonString(JMResources
-                        .getStringWithFilePathOrClasspath(resourceFilePathOrClasspath),
-                typeReference);
+    public static <T> T withFilePathOrClasspath(String resourceFilePathOrClasspath, TypeReference<T> typeReference) {
+        return withJsonString(JMResources.getStringWithFilePathOrClasspath(resourceFilePathOrClasspath), typeReference);
     }
 
     /**
@@ -389,13 +357,11 @@ public class JMJson {
      * @param typeReference the type reference
      * @return the t 2
      */
-    public static <T1, T2> T2 transform(T1 object,
-            TypeReference<T2> typeReference) {
+    public static <T1, T2> T2 transform(T1 object, TypeReference<T2> typeReference) {
         try {
             return jsonMapper.convertValue(object, typeReference);
         } catch (Exception e) {
-            return JMExceptionManager.handleExceptionAndReturnNull(log, e,
-                    "transform", object);
+            return JMExceptionManager.handleExceptionAndReturnNull(log, e, "transform", object);
         }
     }
 
@@ -412,8 +378,7 @@ public class JMJson {
         try {
             return jsonMapper.convertValue(object, typeClass);
         } catch (Exception e) {
-            return JMExceptionManager.handleExceptionAndReturnNull(log, e,
-                    "transform", object);
+            return JMExceptionManager.handleExceptionAndReturnNull(log, e, "transform", object);
         }
     }
 
@@ -424,8 +389,7 @@ public class JMJson {
      * @return the string
      */
     public static String toPrettyString(String jsonString) {
-        return toPrettyJsonString(
-                withJsonString(jsonString, Object.class));
+        return toPrettyJsonString(withJsonString(jsonString, Object.class));
     }
 
     /**
@@ -437,11 +401,9 @@ public class JMJson {
      */
     public static <D> String toPrettyJsonString(D object) {
         try {
-            return jsonMapper.writerWithDefaultPrettyPrinter()
-                    .writeValueAsString(object);
+            return jsonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
         } catch (JsonProcessingException e) {
-            return JMExceptionManager.handleExceptionAndReturnNull(log, e,
-                    "toPrettyJsonString", object);
+            return JMExceptionManager.handleExceptionAndReturnNull(log, e, "toPrettyJsonString", object);
         }
     }
 

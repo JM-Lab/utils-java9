@@ -34,7 +34,7 @@ public class JMSubscriberBuilder {
      * Gets sopl subscriber.
      *
      * @param <I>               the type parameter
-     * @param transformFunction the transform custom
+     * @param transformFunction the transform function
      * @return the sopl subscriber
      */
     public static <I> JMSubscriber<I> getSOPLSubscriber(
@@ -46,7 +46,7 @@ public class JMSubscriberBuilder {
      * Gets json string sopl subscriber.
      *
      * @param <I>               the type parameter
-     * @param transformFunction the transform custom
+     * @param transformFunction the transform function
      * @return the json string sopl subscriber
      */
     public static <I> JMSubscriber<I> getJsonStringSOPLSubscriber(
@@ -83,7 +83,7 @@ public class JMSubscriberBuilder {
      *
      * @param <I>              the type parameter
      * @param filePath         the file path
-     * @param toStringFunction the to string custom
+     * @param toStringFunction the to string function
      * @return the jm file subscriber
      */
     public static <I> JMFileSubscriber<I> buildJsonStringFileSubscriber(

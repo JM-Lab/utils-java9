@@ -21,7 +21,7 @@ public class JMConcurrentProcessor<T, R> extends
      * Instantiates a new Jm concurrent processor.
      *
      * @param workers             the workers
-     * @param transformerFunction the transformer custom
+     * @param transformerFunction the transformer function
      */
     public JMConcurrentProcessor(int workers,
             Function<T, R> transformerFunction) {

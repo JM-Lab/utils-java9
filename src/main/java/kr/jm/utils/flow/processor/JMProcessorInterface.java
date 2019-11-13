@@ -32,7 +32,7 @@ public interface JMProcessorInterface<T, R> extends
      * Subscribe and return processor jm processor interface.
      *
      * @param <O>                 the type parameter
-     * @param transformerFunction the transformer custom
+     * @param transformerFunction the transformer function
      * @return the jm processor interface
      */
     default <O> JMProcessorInterface<R, O> subscribeAndReturnProcessor(
@@ -45,7 +45,7 @@ public interface JMProcessorInterface<T, R> extends
      * Subscribe and return processor with thread pool jm processor interface.
      *
      * @param <O>                 the type parameter
-     * @param transformerFunction the transformer custom
+     * @param transformerFunction the transformer function
      * @return the jm processor interface
      */
     default <O> JMProcessorInterface<R, O> subscribeAndReturnProcessorWithThreadPool(

@@ -1,6 +1,7 @@
 package kr.jm.utils;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import kr.jm.utils.exception.JMExceptionManager;
 import kr.jm.utils.helper.JMJson;
 import kr.jm.utils.helper.JMOptional;
 import kr.jm.utils.helper.JMRestfulResource;
@@ -20,8 +21,7 @@ import static kr.jm.utils.helper.JMPredicate.peek;
  * @param <T> the type parameter
  */
 public class RestfulResourceUpdater<T> {
-    private static final Logger log = org.slf4j.LoggerFactory
-            .getLogger(RestfulResourceUpdater.class);
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(RestfulResourceUpdater.class);
     private String restfulResourceUrl;
     private TypeReference<T> typeReference;
     private String cachedJsonString;
@@ -42,8 +42,7 @@ public class RestfulResourceUpdater<T> {
      * @param restfulResourceUrl the restful resource url
      * @param periodSeconds      the period seconds
      */
-    public RestfulResourceUpdater(String restfulResourceUrl,
-            int periodSeconds) {
+    public RestfulResourceUpdater(String restfulResourceUrl, int periodSeconds) {
         this(restfulResourceUrl, periodSeconds, 0);
     }
 
@@ -54,8 +53,7 @@ public class RestfulResourceUpdater<T> {
      * @param periodSeconds      the period seconds
      * @param initialDelayMillis the initial delay millis
      */
-    public RestfulResourceUpdater(String restfulResourceUrl, int periodSeconds,
-            long initialDelayMillis) {
+    public RestfulResourceUpdater(String restfulResourceUrl, int periodSeconds, long initialDelayMillis) {
         this(restfulResourceUrl, periodSeconds, initialDelayMillis, null);
     }
 
@@ -67,24 +65,35 @@ public class RestfulResourceUpdater<T> {
      * @param initialDelayMillis the initial delay millis
      * @param updateConsumer     the update consumer
      */
-    public RestfulResourceUpdater(String restfulResourceUrl, int periodSeconds,
-            long initialDelayMillis, Consumer<T> updateConsumer) {
-        this(restfulResourceUrl, periodSeconds, initialDelayMillis,
-                updateConsumer, new TypeReference<>() {});
+    public RestfulResourceUpdater(String restfulResourceUrl, int periodSeconds, long initialDelayMillis,
+            Consumer<T> updateConsumer) {
+        this(restfulResourceUrl, periodSeconds, initialDelayMillis, updateConsumer, new TypeReference<>() {});
     }
 
-    public RestfulResourceUpdater(String restfulResourceUrl,
-            int periodSeconds,
-            long initialDelayMillis, Consumer<T> updateConsumer,
-            TypeReference<T> typeReference) {
+    /**
+     * Instantiates a new Restful resource updater.
+     *
+     * @param restfulResourceUrl the restful resource url
+     * @param periodSeconds      the period seconds
+     * @param initialDelayMillis the initial delay millis
+     * @param updateConsumer     the update consumer
+     * @param typeReference      the type reference
+     */
+    public RestfulResourceUpdater(String restfulResourceUrl, int periodSeconds, long initialDelayMillis,
+            Consumer<T> updateConsumer, TypeReference<T> typeReference) {
         this.restfulResourceUrl = restfulResourceUrl;
         this.typeReference = typeReference;
-        if (periodSeconds > 0)
-            JMThread.runWithScheduleAtFixedRate(initialDelayMillis,
-                    TimeUnit.SECONDS.toMillis(periodSeconds),
-                    () -> Optional.ofNullable(updateConsumer)
-                            .ifPresentOrElse(this::updateResource,
-                                    this::updateResourceWithLog));
+        if (initialDelayMillis == 0)
+            update(updateConsumer);
+        if (periodSeconds > 0) {
+            long periodMillis = TimeUnit.SECONDS.toMillis(periodSeconds);
+            JMThread.runWithScheduleAtFixedRate(initialDelayMillis > 0 ? initialDelayMillis : periodMillis,
+                    periodMillis, () -> update(updateConsumer));
+        }
+    }
+
+    private void update(Consumer<T> updateConsumer) {
+        Optional.ofNullable(updateConsumer).ifPresentOrElse(this::updateResource, this::updateResourceWithLog);
     }
 
     /**
@@ -94,8 +103,7 @@ public class RestfulResourceUpdater<T> {
      */
     public Optional<T> updateResourceWithLog() {
         Optional<T> resourceAsOpt = updateResource();
-        log.debug("Updated Resource - {}",
-                resourceAsOpt.isPresent() ? "YES" : "NO");
+        log.info("Updated Resource - {}, url - {}", resourceAsOpt.isPresent() ? "YES" : "NO", restfulResourceUrl);
         return resourceAsOpt;
     }
 
@@ -105,13 +113,15 @@ public class RestfulResourceUpdater<T> {
      * @return the optional
      */
     public Optional<T> updateResource() {
-        return JMOptional.getOptional(JMRestfulResource
-                .getStringWithRestOrClasspathOrFilePath(restfulResourceUrl))
-                .filter(getEquals(cachedJsonString).negate())
-                .filter(peek(this::setJsonStringCache))
-                .map(jsonString -> JMJson.withJsonString(jsonString,
-                        typeReference))
-                .filter(peek(resource -> this.cachedResource = resource));
+        try {
+            return JMOptional.getOptional(JMRestfulResource.getStringWithRestOrClasspathOrFilePath(restfulResourceUrl))
+                    .filter(getEquals(cachedJsonString).negate()).filter(peek(this::setJsonStringCache))
+                    .map(jsonString -> JMJson.withJsonString(jsonString, typeReference))
+                    .filter(peek(resource -> this.cachedResource = resource));
+        } catch (Exception e) {
+            return JMExceptionManager
+                    .handleExceptionAndReturnEmptyOptional(log, e, "updateResource", restfulResourceUrl);
+        }
     }
 
     /**

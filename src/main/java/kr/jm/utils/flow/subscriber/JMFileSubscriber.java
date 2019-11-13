@@ -41,7 +41,7 @@ public class JMFileSubscriber<I> extends JMSubscriber<I> implements
      * Instantiates a new Jm file subscriber.
      *
      * @param filePath         the file path
-     * @param toStringFunction the to string custom
+     * @param toStringFunction the to string function
      */
     public JMFileSubscriber(String filePath,
             Function<Object, String> toStringFunction) {
