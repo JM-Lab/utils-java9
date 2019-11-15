@@ -37,7 +37,7 @@ public class JMConcurrentProcessor<T, R> extends
     @Override
     public void close() {
         JMLog.info(log, "close");
-        JMThread.awaitTermination(this.executorService, 3000);
+        JMThread.awaitTermination(this.executorService, 10000);
         super.close();
     }
 }
