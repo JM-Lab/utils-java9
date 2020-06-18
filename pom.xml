@@ -37,7 +37,7 @@
         <slf4j.version>1.7.26</slf4j.version>
         <junit.version>4.12</junit.version>
         <jmlab-utils-java8.version>0.1.95</jmlab-utils-java8.version>
-        <jackson-databind.version>2.9.10.1</jackson-databind.version>
+        <jackson-databind.version>2.10.0.pr1</jackson-databind.version>
         <httpclient.version>4.5.10</httpclient.version>
     </properties>
 
