@@ -86,6 +86,7 @@
                     <source>${java.version}</source>
                     <javadocExecutable>${java.home}/bin/javadoc
                     </javadocExecutable>
+                    <detectJavaApiLink>false</detectJavaApiLink>
                 </configuration>
                 <executions>
                     <execution>
