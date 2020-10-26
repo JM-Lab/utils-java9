@@ -313,6 +313,17 @@ public class JMJson {
                 typeReference);
     }
 
+    public static <T> T withRestOrClasspathOrFilePath(String resourceRestUrlOrClasspathOrFilePath, Class<T> tClass) {
+        return withJsonString(
+                JMRestfulResource.getStringWithRestOrClasspathOrFilePath(resourceRestUrlOrClasspathOrFilePath), tClass);
+    }
+
+    public static <T> T withRestOrFilePathOrClasspath(String resourceRestOrFilePathOrClasspath, Class<T> tClass) {
+        return withJsonString(
+                JMRestfulResource.getStringWithRestOrFilePathOrClasspath(resourceRestOrFilePathOrClasspath), tClass);
+    }
+
+
     /**
      * With classpath or file path t.
      *
@@ -335,6 +346,14 @@ public class JMJson {
      */
     public static <T> T withFilePathOrClasspath(String resourceFilePathOrClasspath, TypeReference<T> typeReference) {
         return withJsonString(JMResources.getStringWithFilePathOrClasspath(resourceFilePathOrClasspath), typeReference);
+    }
+
+    public static <T> T withClasspathOrFilePath(String resourceClasspathOrFilePath, Class<T> tClass) {
+        return withJsonString(JMResources.getStringWithClasspathOrFilePath(resourceClasspathOrFilePath), tClass);
+    }
+
+    public static <T> T withFilePathOrClasspath(String resourceFilePathOrClasspath, Class<T> tClass) {
+        return withJsonString(JMResources.getStringWithFilePathOrClasspath(resourceFilePathOrClasspath), tClass);
     }
 
     /**
