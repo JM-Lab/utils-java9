@@ -1,0 +1,22 @@
+[
+  {
+    "priceType": "FREE",
+    "maxCount":  200000,
+    "maxBytes":  10485760
+  },
+  {
+    "priceType": "PREMIUM",
+    "maxCount":  100,
+    "maxBytes":  104857600
+  },
+  {
+    "priceType": "PREMIUM",
+    "maxCount":  1000000,
+    "maxBytes":  10485
+  },
+  {
+    "priceType": "PREMIUM",
+    "maxCount":  2000000,
+    "maxBytes":  209715200
+  }
+]
